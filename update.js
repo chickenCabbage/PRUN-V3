@@ -8,14 +8,18 @@ client.on("fetch", function(){ //when client.fetch() is called
 	if(client.title != title) { //if the title changed - new page!
 		var date = new Date();
 		var time = date.getUTCHours() + ":" + date.getUTCMinutes() + " " +
-		date.getUTCDate() + "/" + (date.getUTCMonth() + 1) + "/" +date.getUTCFullYear() //date, in UTC
+		date.getUTCDate() + "/" + (date.getUTCMonth() + 1) + "/" + date.getUTCFullYear() //date, in UTC
 
 		console.log("UPDATED! on " + time + ": " + client.title); //woo
 		fs.writeFile("./update.txt", time + "," + client.title + "," + client.images[0]); //change update.txt
 
+		title = client.title;
+
 		//ACTIVATE UPDATE MAILING HERE
 	}
-	title = client.title;
+	else {
+		console.log("DEBUG NOPE");
+	}
 });
 
 client.on("error", function(err) { //if an error occures

@@ -166,7 +166,7 @@
 			 Notification.requestPermission(); //please OwO
 		});
 
-		function notify() {
+		function notify(image) {
 			if (!Notification) {
 				alert("Prague Race updated!\nDesktop notifications aren't available in your browser.");
 				return;
@@ -178,11 +178,12 @@
 			else { //if you did though
 				console.log("UPDATE!");
 				var notification = new Notification("Prague Race updated!", {
-					icon: "newestPage.jpg",
+					icon: image,
 					body: "We just noticed an update to Prague Race, you should go check it out!",
 				});
 				notification.onclick = function() {
-					window.open("http://www.praguerace.com/");      
+					window.open("http://www.praguerace.com/");
+					notification.close();      
 				};
 			}
 		}
@@ -205,7 +206,7 @@
 					document.getElementById("lad").innerHTML = updateText.split(",")[0];
 					document.getElementById("lat").innerHTML = updateText.split(",")[1];
 					document.getElementById("spoiler").src = updateText.split(",")[2];
-					notify();
+					notify(updateText.split(",")[2]);
 				}
 				updateText = data;
 			});
