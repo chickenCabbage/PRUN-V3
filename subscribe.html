@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Subscribe!</title>
+	<style>
+		body {
+			font-family: "Trebuchet MS", "Courier New";
+			text-align: center;
+		}
+		.topMenu {
+			width: 100%;
+			height: 12%;
+			top: 0%;
+			left: 0%;
+			z-index: 1;
+			position: fixed;
+			background-color: rgba(0, 25, 33, 0.8);
+			text-align: right;
+		}
+		#navicon {
+			width: 6%;
+			top: 1%;
+			right: 1%;
+			z-index: 2;
+			position: fixed;
+			transition: 0.3s;
+			cursor: pointer;
+		}
+		#logo {
+			top: 0%;
+			left: 0%;
+			width: 15%;
+			z-index: 2;
+			position: fixed;
+		}
+
+		#twitter { /* #twitter ayy lmao */
+			top: 4%;
+			left: 40%;
+			width: 3%;
+			z-index: 2;
+			position: fixed;
+		}
+		#rss {
+			top: 3.5%;
+			left: 35%;
+			width: 3%;
+			z-index: 2;
+			position: fixed;
+		}
+		#tumblr {
+			top: 3.5%;
+			left: 45%;
+			width: 3%;
+			z-index: 2;
+			position: fixed;
+		}
+		#patreon {
+			top: 4.5%;
+			left: 50%;
+			height: 3%;
+			z-index: 2;
+			position: fixed;
+		}
+
+		#vertiBar {
+			width: 2.5%;
+			height: 100%;
+			top: 0%;
+			left: 0%;
+			position: fixed;
+			background-color: rgba(0, 25, 33, 0.6);
+		}
+
+		.sidenav {
+			height: 100%;
+			width: 0%; /*This will be changed with JS*/
+			top: 0%;
+			right: 0%;
+			background-color: rgba(0, 8, 10, 0.95);
+			overflow-x: hidden;
+			padding-top: 3%;
+			z-index: 3;
+			position: fixed;
+			transition: 0.5s;
+			text-align: center;
+
+		}
+		.sidenav a {
+			color: lightgray;
+			display: block;
+			transition: 0.3s;
+		}
+		.sidenav #closebtn {
+			position: absolute;
+			top: 0;
+			right: 5%;
+		}
+
+		.notMenu {
+			width: 90%;
+			height: 88%;
+			top: 10%;
+			left: 4%;
+			padding: 2%;
+			position: absolute;
+			text-align: center;
+		}
+		form input {
+			width: 40%;
+			padding: 0.7%;
+			font-size: 1.3em;
+			font-family: "Consolas", "Courier New";
+		}
+		form .text {
+			border: none;
+			border-bottom: solid black;
+		}
+
+		#warn {
+			width: 20%;
+			left: 40%;
+			opacity: 0;
+			background-color: rgba(255, 50, 50, 0.8);
+			position: absolute;
+			transition: 0.1s;
+		}
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">//jQuery</script>
+	<script>
+		//// ALL THE ANIMATED DIVS ////////////////////////////////////////////////////////////////
+
+		function openNav() { //open the sidenav
+			document.getElementById("sidepanel").style.width = "26%";
+			document.getElementById("navicon").style.opacity = "0";
+		}
+		function closeNav() { //close the sidenav
+			document.getElementById("sidepanel").style.width = "0%";
+			document.getElementById("navicon").style.opacity = "1";
+		}
+
+		//// VALIDATE THE PASSWORD ////////////////////////////////////////////////////////////////
+
+		function checkPW() {
+			var pw1 = document.getElementById("pw1").value;
+			var pw2 = document.getElementById("pw2").value
+
+			if (pw1 == pw2) {
+				if(pw1.indexOf(",") != -1
+					|| pw1.indexOf(":") != -1
+					|| pw1.indexOf(" ") != -1
+					|| pw1.indexOf("'") != -1
+					|| pw1.indexOf("\\") != -1
+					|| pw1.indexOf("*") != -1
+					|| pw1.indexOf("\"") != -1) { //check for sh*t
+					document.getElementById("warn").innerHTML = "Invalid password.";
+					document.getElementById("warn").style.opacity = "1";
+					document.getElementById("submit").disabled = true;
+				}
+				else {
+					if (pw1.length > 6) {
+						document.getElementById("warn").style.opacity = "0";
+						document.getElementById("submit").disabled = false;
+					}
+					else {
+						document.getElementById("warn").innerHTML = "Please use a password with more characters."
+						+ "(> 6)";
+						document.getElementById("warn").style.opacity = "1";
+						document.getElementById("submit").disabled = true;
+					}
+				}
+			}
+			else {
+				document.getElementById("warn").innerHTML = "Passwords don't match!";
+				document.getElementById("warn").style.opacity = "1";
+				document.getElementById("submit").disabled = true;
+			}
+		};
+
+		//// POST DATA TO THE SERVER //////////////////////////////////////////////////////////////
+
+		function post() {
+			var name = document.getElementById("name").value;
+			var password = document.getElementById("pw1").value;
+
+			if(name.indexOf(",") != -1
+				|| name.indexOf(":") != -1
+				|| name.indexOf("'") != -1
+				|| name.indexOf("\\") != -1
+				|| name.indexOf("*") != -1
+				|| name.indexOf("\"") != -1) { //not gonna inject me, boi
+				document.getElementById("warn").innerHTML = "Invalid username.";
+				document.getElementById("warn").style.opacity = "1";
+			}
+
+			jQuery.post("/newUser", {username: name, pass: password}, function(result) {
+				switch(result) {
+					case "complete":
+						document.getElementById("warn").style.opacity = "0";
+						window.location = "/login.html";
+					break;
+					case "exists": //this user already exists
+						document.getElementById("warn").innerHTML = "This email is already registered.";
+						document.getElementById("warn").style.opacity = "1";
+					break;
+
+					default: //error
+						document.getElementById("warn").innerHTML = "A server error occured:\n" + result;
+						document.getElementById("warn").style.opacity = "1";
+					break;
+				}
+			});
+		}
+	</script>
+</head>
+<body>
+	<div class="topMenu"> <!--The top bar thing-->
+		<img src="./images/navicon.png" id="navicon" onclick="openNav()""><!--The menu symbol-->
+	</div>
+	<a href="javascript:window.open('http://leppu.tumblr.com/');"><img id="tumblr" src="./images/tumblr.png"></a> <!--Leppu's Tumblr-->
+	<a href="javascript:window.open('https://twitter.com/petra_nordlund');"><img id="twitter" src="./images/twitter.png"></a> <!--Leppu's Twitter-->
+	<a href="javascript:window.open('http://www.praguerace.com/rss.php');"><img id="rss" src="./images/rss.png"></a> <!--Hiveworks's RSS--> <!--TBH I have no idea about how RSS works or how to use it-->
+	<a href="javascript:window.open('https://www.patreon.com/praguerace');"><img id="patreon" src="./images/patreon.png"></a> <!--Leppu's Patreon--> <!--Please go donate!-->
+
+	<div id="vertiBar"></div> <!--The side bar thing-->
+
+	<img id="logo" src="./images/doofR.png"> <!--The werewolf face-->
+
+	<div class="sidenav" id="sidepanel"> <!--The sidenav itself-->
+		<br><br><br><br> <!--Highly sophisticated methods of spacing-->
+		<h1><a href="javascript:void(0)" id="closebtn" onclick="closeNav()">&times;</a></h1>
+		<h2><a href="/index.html">Back to the home page</a></h2>
+		<br><br><br>
+		<h2><a href="/login.html">Modify your settings</a></h2>
+		<br><br><br>
+		<h2><a href="javascript:window.open('http://www.praguerace.com/');">Read the comic!</a></h2>
+		<br><br><br>
+		<h2><a href="/about">About this</a></h2>
+	</div>
+
+	<div class="notMenu">
+		<form action="javascript:post();" id="form">
+			<h2>Email:</h2>
+			<br>
+			<input class="text" type="text" id="name" name="username">
+			<p>You will be sent an email for confirmation.</p>
+			<br>
+			<h2>Password</h2>
+			<input class="text" type="password" id="pw1" name="pass" oninput="checkPW()">
+			<br><br>
+			<h2>Repeat the password</h2>
+			<input class="text" type="password" id="pw2" name="pass2" oninput="checkPW()">
+			<br><br><br>
+			<input type="submit" id="submit" value="Sign up!">
+			<br>
+		</form>
+		<br>
+		<div id="warn">Lorem ipsum dolor sit amet</div>
+		<!--not gonna show up anyway as is so who gives a flying f**k-->
+	</div>
+</body>
+</html>
