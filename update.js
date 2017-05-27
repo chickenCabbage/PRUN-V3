@@ -1,5 +1,6 @@
 var insp = require("node-metainspector");
 var client = new insp("http://www.praguerace.com", {timeout: 99999}); //crawling config
+var color = require("colors");
 var fs = require("fs");
 
 var title = fs.readFileSync("./update.txt").toString().split(",")[1]; //stores the page's title
@@ -11,7 +12,7 @@ client.on("fetch", function(){ //when client.fetch() is called
 		var time = date.getUTCHours() + ":" + date.getUTCMinutes() + " " +
 		date.getUTCDate() + "/" + (date.getUTCMonth() + 1) + "/" + date.getUTCFullYear() //date, in UTC
 
-		console.log("UPDATED! on " + time + ": " + client.title); //woo
+		console.log(color.bold("UPDATED!") + " on " + time + ": " + client.title); //woo
 		fs.writeFile("./update.txt", time + "," + client.title + "," + client.images[0]); //change update.txt
 
 		title = client.title;

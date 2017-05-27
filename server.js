@@ -1,5 +1,6 @@
 var exec = require("child_process").exec;
 var crypto = require("crypto"); //nodejs cryptography
+var colors = require("colors"); //awsome console
 var algorithm = "aes-256-ctr"; //encryption algorithm
 var http = require("http"); //basic HTTP shit
 var fs = require("fs"); //for file I/O
@@ -7,6 +8,13 @@ var port = 8887;
 var body = ""; //for POST data
 
 var key = "wu7 7)(3 f*ck N0de.jS"; //the AES encryption key
+
+function harsh(text) {
+	console.log("\n" + colors.red("ERROR: ") + text + "\n");
+}
+function light(text) {
+	console.log(colors.yellow("WARNING: ") + text);
+}
 
 function newUser(request, response) { //when a user is trying to subscribe
 	body = ""; //THIS IS IMPORTANT SO PAST CREDENTIALS DON'T GET CARRIED OVER
@@ -35,27 +43,28 @@ function newUser(request, response) { //when a user is trying to subscribe
 					var cmd = "java -jar verify.jar " + name + " " + encrypt(body.split("=")[2]);
 					//run verify.jar with the name and encrypted PW of the new user
 					exec(cmd, function(error, stdout, stderr){
-						if(stdout != null) { //if there is output
-							console.log(stdout); //print it
+						if(stdout != "") { //if there is output
+							light("Verify.jar says: " + stdout);
 						}
-						if(stderr != null) { //if there is errput
-							console.log(stderr); //print it too
+						if(stderr != "") { //if there is errput
+							harsh(stderr); //print it too
 						}
 					}); //end if
 					response.writeHead(200, {"Content-Type": "text/plain"});
 					response.end("complete"); //if you made it this far all's cool, things executed well
+					light("Added user: " + name);
 				} //if the file does exist but it did a "wrong step" and died
 				else { //general error
 					response.writeHead(500, {"Content-Type": "text/plain"});
 					response.end(err);
-					console.log("An error occured on signup! " + err + "\nUser: " + name);
+					harsh("An error occured on signup! " + err + "\nUser: " + name);
 				} //end if-else
 			} //end catch
 		} //end try
 		catch(err) { //this sucks
 			response.writeHead(500, {"Content-Type": "text/plain"});
 			response.end(err);
-			console.log("An error occured on signup! " + err + "\nUser: " + name);
+			harsh("An error occured on signup! " + err + "\nUser: " + name);
 
 		} //end catch
 	}); //end request.on("end", function() {})
@@ -68,8 +77,6 @@ function authLogin(request, response) { //on every login attempt
 	});
 	request.on("end", function() { //when you're done
 		var name = body.split("=")[1].split("&")[0].replace("%40", "@"); //a little shorter
-		console.log(name);
-		console.log(body.split("=")[2]);
 		try {
 			//if the given password matches the decypted password from the file
 			if(decrypt(fs.readFileSync("./users/" + name + ".usr")) == body.split("=")[2]) {
@@ -94,7 +101,7 @@ function authLogin(request, response) { //on every login attempt
 				else { //any other error
 					response.writeHead(500, {"Content-Type": "text/plain"});
 					response.end(err + ",");
-					console.log("An error occured on login! " + err + "\nUser: " + name);
+					harsh("An error occured on login! " + err + "\nUser: " + name);
 				}
 			}
 			catch(err2) {
@@ -106,7 +113,7 @@ function authLogin(request, response) { //on every login attempt
 				else { //any other error
 					response.writeHead(500, {"Content-Type": "text/plain"});
 					response.end(err + ",");
-					console.log("An error occured on login! " + err + "\nUser: " + name);
+					harsh("An error occured on login! " + err + "\nUser: " + name);
 				}
 			}
 		} //end catch
@@ -184,7 +191,7 @@ http.createServer(function(request, response) { //on every request to the server
 					}
 				}
 				catch(err) {
-					console.log("Error in verification: " + err);
+					harsh("Error in email verification: " + err);
 				}
 			}
 			else {
@@ -215,6 +222,7 @@ http.createServer(function(request, response) { //on every request to the server
 			response.end("<h1>Oops.</h1>" +
 				"<p>There was an error, the page you're looking for can't be found.</p>" +
 				"<p>HTTP error 404.</p>");
+			light("Served 404 for " + request.url);
 		}
 		else if(err == "403") {
 			response.writeHead(403, {"Content-Type": "text/html"});
@@ -228,17 +236,17 @@ http.createServer(function(request, response) { //on every request to the server
 				request.socket.remoteAddress ||
 				request.connection.socket.remoteAddress;
 			var now = new Date();
-			console.log("Served 403 for " + request.url + ", 403 Forbidden." +
-				"\nIP: " + ip +
-				"\nTIME: " + now +
-				"\n"); //I want to have records of this in case something is hacked
+
+			console.log(colors.red("\nERROR: ") + "Served 403 for " + request.url + ", 403 Forbidden.");
+			console.log(colors.red("TIME: ") + now);//I want to have records of this in case something is hacked
+			console.log(colors.red("IP: ") + ip + '\n');
 		}
 		else {
 			response.writeHead(500, {"Content-Type": "text/html"});
 			response.end("<h1>Oops.</h1>" +
 				"<p>There was an error.</p>" +
 				"<p>JavaScript error code: " + err.code + "</p>");
-			console.log("Served 500 for error: " + err + "\nRequest: " + request.url);
+			harsh("Served 500 for error: " + err + "\nRequest: " + request.url);
 		}
 	}
 }).listen(port);
