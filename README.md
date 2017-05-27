@@ -45,6 +45,7 @@ The Node.js scripts require the following modules:
 * node-metainspector
 * child_process
 * crypto
+* colors
 * http
 * fs
 
