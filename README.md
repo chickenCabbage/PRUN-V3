@@ -30,11 +30,11 @@ command line simply as `java`.
 
 
 The Node.js scripts require the following modules:  
- * node-metainspector
- * child_process
- * crypto
- * http
- * fs
+* node-metainspector
+* child_process
+* crypto
+* http
+* fs
 
 
 The program uses ports 8888 (for serving the website) and 567 (for SMTP). 8888
@@ -47,4 +47,4 @@ The users folder contains all the website's users' data and should NOT be
 tampered with in ANY case. File contents are encrypted and MUST NOT be touched.
 
 
-**DO NOT RENAME OR CHANGE THE LOCATIONS OF ANY FILES!**
+# **DO NOT RENAME OR CHANGE THE LOCATIONS OF ANY FILES!**
