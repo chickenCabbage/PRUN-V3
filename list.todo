@@ -1,0 +1,14 @@
+TODO List:
+
+1.  Add in #navicon: "cursor: pointer;".
+2.  Use a style.css document to make it easy to change CSS settings and to make the code more clear.
+3.  Try the same with .js files, cuz why not.
+4.  Add "login" link. And don't U even think about say "NEVER!".
+5.  Add "logout" option (to kill the cookie).
+6.  Should we add "change password" option, or we're too lazy?
+7.  Make sure that "prefs.html" will show the prefs, only if there is an alive cookie.
+8.  Block the user from accessing any file we DON'T want it to see (and yeah, I just said "it", about a user).
+9.  Encrypt the number in the UNV file a bit better (Even if it's just something like: Palindrome(10000 - Palindrome(number)), so the decryption will be exactly the same).
+10. Add "about.html" page.
+11. Play a bit with the CSS, so the site won't be breakable.
+12. Show images and favicon as images and not as text.
