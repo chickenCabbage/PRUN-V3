@@ -1,4 +1,4 @@
-# ~*~ Prague Race Update Notifier - P.R.U.N ~*~
+# =[#]= Prague Race Update Notifier - P.R.U.N =[#]=
 #### (proon)
 
 
@@ -25,8 +25,7 @@ and it gives you information about the last update, such as the title, time,
 and the latest comic page. It even has notifications, if you're using Chrome!
 RSS readers don't have cool websites amirite?  
 Feeds require code and stuff. It's ugly, it's prone to error, and it's XML
-(no one likes XML). PRUN is just a sign-up. Much more sleek, much less
-confusing.
+(no one likes XML). PRUN is just a sign-up. Much less confusing.
 
 _Easy. Sleek. Everywhere._
 
