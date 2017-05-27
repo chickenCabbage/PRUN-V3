@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>About PRUN</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script>
+		//// ALL THE ANIMATED DIVS ////////////////////////////////////////////////////////////////
+
+		function openNav() { //open the sidenav
+			document.getElementById("sidepanel").style.width = "26%";
+			document.getElementById("navicon").style.opacity = "0";
+		}
+		function closeNav() { //close the sidenav
+			document.getElementById("sidepanel").style.width = "0%";
+			document.getElementById("navicon").style.opacity = "1";
+		}
+	</script>
+</head>
+<body>
+	<div class="topMenu"> <!--The top bar thing-->
+		<img src="./images/navicon.png" id="navicon" onclick="openNav()""><!--The menu symbol-->
+	</div>
+	<a href="javascript:window.open('http://leppu.tumblr.com/');"><img id="tumblr" src="./images/tumblr.png"></a> <!--Leppu's Tumblr-->
+	<a href="javascript:window.open('https://twitter.com/petra_nordlund');"><img id="twitter" src="./images/twitter.png"></a> <!--Leppu's Twitter-->
+	<a href="javascript:window.open('http://www.praguerace.com/rss.php');"><img id="rss" src="./images/rss.png"></a> <!--Hiveworks's RSS--> <!--TBH I have no idea about how RSS works or how to use it-->
+	<a href="javascript:window.open('https://www.patreon.com/praguerace');"><img id="patreon" src="./images/patreon.png"></a> <!--Leppu's Patreon--> <!--Please go donate!-->
+
+	<div id="vertiBar"></div> <!--The side bar thing-->
+
+	<img id="logo" src="./images/doofR.png" alt="The head of the white wearwolf from Pam's pack"> <!--The werewolf face-->
+
+	<div class="sidenav" id="sidepanel"> <!--The sidenav itself-->
+		<br><br><br><br> <!--Highly sophisticated methods of spacing-->
+		<h1><a href="javascript:void(0)" id="closebtn" onclick="closeNav()">&times;</a></h1>
+		<h2><a href="/index.html">Back to the home page</a></h2>
+		<br><br><br>
+		<h2><a href="/subscribe.html">Subscribe to updates</a></h2>
+		<br><br><br>
+		<h2><a href="/login.html">Modify your settings</a></h2>
+		<br><br><br>
+		<h2><a href="javascript:window.open('http://www.praguerace.com/');">Read the comic!</a></h2>
+	</div>
+
+	<div class="notMenu">
+		<h1>About the website</h1>
+	</div>
+</body>
+</html>
