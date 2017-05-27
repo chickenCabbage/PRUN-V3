@@ -97,8 +97,8 @@ function authLogin(request, response) { //on every login attempt
 					console.log("An error occured on login! " + err + "\nUser: " + name);
 				}
 			}
-			catch {
-					if(err.code == "ENOENT") { //if there's no such file
+			catch(err2) {
+				if(err2.code == "ENOENT") { //if there's no such file
 					//this user doesn't exist yet or you haven't verified your email
 					response.writeHead(200, {"Content-Type": "text/plain"});
 					response.end("username,");
