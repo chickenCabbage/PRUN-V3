@@ -1,15 +1,15 @@
-___________      ____________       ____     ____      ____     ____  
-|  ______ /      |  ______  /       |  |     |  /      |   \    |  /  
-|  |    | |      |  |    |  |       |  |     |  |      |    \   |  |  
-|  | || | |      |  | || |  |       |  |     |  |      |  \  \  |  |  
-|  |____| |      |  |____/  |       |  |     |  |      |  |\  \ |  |  
-|   ______/      |  ________/       |  |     |  |      |  | \  \|  |  
-|  |             |  |  \  \         |  |     |  |      |  |  \  \  |  
-|  |             |  |   \  \        |  |     |  |      |  |   \    |  
-|  |             |  |    \  \       |  |_____|  |      |  |    \   |  
-|__|         ||  |__|     \__\  ||  \___________/  ||  |__|     \__|  
+    ___________      ____________       ____     ____      ____     ____  
+    |  ______ /      |  ______  /       |  |     |  /      |   \    |  /  
+    |  |    | |      |  |    |  |       |  |     |  |      |    \   |  |  
+    |  | || | |      |  | || |  |       |  |     |  |      |  \  \  |  |  
+    |  |____| |      |  |____/  |       |  |     |  |      |  |\  \ |  |  
+    |   ______/      |  ________/       |  |     |  |      |  | \  \|  |  
+    |  |             |  |  \  \         |  |     |  |      |  |  \  \  |  
+    |  |             |  |   \  \        |  |     |  |      |  |   \    |  
+    |  |             |  |    \  \       |  |_____|  |      |  |    \   |  
+    |__|         ||  |__|     \__\  ||  \___________/  ||  |__|     \__|  
   
-PRAGUE       .   RACE           .   UPDATE         .   NOTIFIER
+    PRAGUE       .   RACE           .   UPDATE         .   NOTIFIER
 
 
 Built and maintained by Alon Shiboleth and Idan Lerman  
@@ -30,11 +30,11 @@ command line simply as `java`.
 
 
 The Node.js scripts require the following modules:  
-* node-metainspector
-* child_process
-* crypto
-* http
-* fs
+ * node-metainspector
+ * child_process
+ * crypto
+ * http
+ * fs
 
 
 The program uses ports 8888 (for serving the website) and 567 (for SMTP). 8888
