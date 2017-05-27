@@ -1,5 +1,4 @@
-# =[#]= Prague Race Update Notifier - P.R.U.N =[#]=
-#### (proon)
+# Prague Race Update Notifier - P.R.U.N
 
 
 Built and maintained by Alon Shiboleth and Idan Lerman  
