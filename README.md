@@ -33,10 +33,12 @@ handy, and very on-the-go. No app, no software, no download.
 PRUN has an awesome website I made by myself with my very awesome CSS skills
 and it gives you information about the last update, such as the title, time,
 and the latest comic page. It even has notifications, if you're using Chrome!
-RSS readers don't have cool websites amirite?
+RSS readers don't have cool websites amirite?  
 Feeds require code and stuff. It's ugly, it's prone to error, and it's XML
 (no one likes XML). PRUN is just a sign-up. Much more sleek, much less
 confusing.
+
+_Easy. Sleek. Everywhere._
 
 
 
