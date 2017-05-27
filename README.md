@@ -21,6 +21,21 @@ This is a website and service for notifiying readers of the comic Prague Race
 when the comic updates and a new page comes out.
 
 
+### Why use PRUN instead of an RSS reader?
+
+
+RSS readers are often a few minutes late. This is Bad™ if you want _immidiate_
+updates. PRUN's maximal latency is 30 seconds.  
+PRUN doesn't require an external program downloaded from who-knows-where,
+and will give you a shoutout over e-mail wherever and whenever. It's pretty
+handy, and very on-the-go.  
+PRUN has an awesome website I made by myself with my very awesome CSS skills
+and it gives you information about the last update, such as the title, time,
+and the latest comic page. It even has notifications, if you're using Chrome!
+RSS readers don't have cool websites amirite?
+
+
+
 ### Technical details:
 
 
@@ -50,4 +65,4 @@ The users folder contains all the website's users' data and should NOT be
 tampered with in ANY case. File contents are encrypted and MUST NOT be touched.
 
 
-### **DO NOT RENAME OR CHANGE THE LOCATIONS OF ANY FILES!**
+### **DO NOT RENAME OR CHANGE ANY FILES OR THEIR LOCATIONS!**
