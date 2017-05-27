@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<head>
+	<title>Prague Race Updates</title>
+	<style>
+		body {
+	font-family: "Courier New";
+}
+.topMenu {
+	width: 100%;
+	height: 12%;
+	top: 0%;
+	left: 0%;
+	z-index: 1;
+	position: fixed;
+	background-color: rgba(0, 25, 33, 0.8);
+	text-align: right;
+}
+#navicon {
+	width: 6%;
+	top: 1%;
+	right: 1%;
+	z-index: 2;
+	position: fixed;
+	transition: 0.3s;
+	cursor: pointer;
+}
+#logo {
+	top: 0%;
+	left: 0%;
+	width: 15%;
+	z-index: 2;
+	position: fixed;
+}
+
+#twitter { /* #twitter ayy lmao */
+	top: 4%;
+	left: 40%;
+	width: 3%;
+	z-index: 2;
+	position: fixed;
+}
+#rss {
+	top: 3.5%;
+	left: 35%;
+	width: 3%;
+	z-index: 2;
+	position: fixed;
+}
+#tumblr {
+	top: 3.5%;
+	left: 45%;
+	width: 3%;
+	z-index: 2;
+	position: fixed;
+}
+#patreon {
+	top: 4.5%;
+	left: 50%;
+	height: 3%;
+	z-index: 2;
+	position: fixed;
+}
+
+#vertiBar {
+	width: 2.5%;
+	height: 100%;
+	top: 0%;
+	left: 0%;
+	position: fixed;
+	background-color: rgba(0, 25, 33, 0.6);
+}
+
+.sidenav {
+	height: 100%;
+	width: 0%; /*This will be changed with JS*/
+	top: 0%;
+	right: 0%;
+	background-color: rgba(0, 8, 10, 0.95);
+	overflow-x: hidden;
+	padding-top: 3%;
+	z-index: 3;
+	position: fixed;
+	transition: 0.5s;
+	text-align: center;
+
+}
+.sidenav a {
+	color: lightgray;
+	display: block;
+	transition: 0.3s;
+}
+.sidenav #closebtn {
+	position: absolute;
+	top: 0;
+	right: 5%;
+	text-decoration: none;
+}
+
+.notMenu {
+	width: 90%;
+	height: 88%;
+	top: 16%;
+	left: 4%;
+	padding: 2%;
+	position: absolute;
+}
+
+.table {
+	width: 90%;
+	padding-left: 5%;
+	text-align: center;
+}
+.table a {
+	color: rgb(0, 25, 33);
+}
+
+#spoilers {
+	height: 100%;
+	width: 0%; /*This will be changed with JS*/
+	top: 0%;
+	left: 0%;
+	background-color: rgb(0, 8, 10);
+	overflow-x: hidden;
+	z-index: 3;
+	position: fixed;
+	transition: 0.5s;
+	text-align: center;
+}
+#spoilers a {
+	color: lightgray;
+	display: block;
+	transition: 0.3s;
+	text-decoration: none;
+}
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">//jQuery</script>
+	<script>
+		var updateText;
+		var lastCheckTime = 0;
+
+		//// ALL THE ANIMATED DIVS ////////////////////////////////////////////////////////////////
+
+		function openNav() { //open the sidenav
+			document.getElementById("sidepanel").style.width = "26%";
+			document.getElementById("navicon").style.opacity = "0";
+		}
+		function closeNav() { //close the sidenav
+			document.getElementById("sidepanel").style.width = "0%";
+			document.getElementById("navicon").style.opacity = "1";
+		}
+		function openSpoiler() { //open the last page image
+			document.getElementById("spoilers").style.width = "100%";
+		}
+		function closeSpoiler() { //close the last page image
+			document.getElementById("spoilers").style.width = "0%";
+		}
+
+		//// NOTIFICATIONS ////////////////////////////////////////////////////////////////////////
+
+		document.addEventListener('DOMContentLoaded', function() { //ask for permissions
+			if (Notification.permission !== "granted")
+			 Notification.requestPermission(); //please OwO
+		});
+
+		function notify() {
+			if (!Notification) {
+				alert("Prague Race updated!\nDesktop notifications aren't available in your browser.");
+				return;
+			}
+
+			if (Notification.permission !== "granted"){ //if you didn't get permission
+				Notification.requestPermission();
+			}
+			else { //if you did though
+				console.log("UPDATE!");
+				var notification = new Notification("Prague Race updated!", {
+					icon: "newestPage.jpg",
+					body: "We just noticed an update to Prague Race, you should go check it out!",
+				});
+				notification.onclick = function() {
+					window.open("http://www.praguerace.com/");      
+				};
+			}
+		}
+
+		//// ACTUAL "MECHANISM" ///////////////////////////////////////////////////////////////////
+
+		window.onLoad = jQuery.get("/update.txt", function(data, status) { //init
+			updateText = data;
+			document.getElementById("lad").innerHTML = updateText.split(",")[0];
+			document.getElementById("lat").innerHTML = updateText.split(",")[1];
+			document.getElementById("spoiler").src = updateText.split(",")[2];
+		});
+
+		function check() {
+			document.getElementById("status").innerHTML = "Checking for update...";
+			jQuery.get("/update.txt", function(data, status) {
+				if(data == updateText) {}
+				else { //yes update
+					document.getElementById("status").innerHTML = "Update!";
+					document.getElementById("lad").innerHTML = updateText.split(",")[0];
+					document.getElementById("lat").innerHTML = updateText.split(",")[1];
+					document.getElementById("spoiler").src = updateText.split(",")[2];
+					notify();
+				}
+				updateText = data;
+			});
+		}
+
+		//// TIMER ////////////////////////////////////////////////////////////////////////////////
+
+		window.onLoad = setInterval(function() {
+			document.getElementById("status").innerHTML = "Checked " + lastCheckTime + " seconds ago."
+			if (lastCheckTime == 30){ //reset the check loop
+				check(); //refresh
+				lastCheckTime = 0;
+			}
+			lastCheckTime ++;
+		}, 1000);
+	</script>
+</head>
+<body>
+	<div class="topMenu"> <!--The top bar thing-->
+		<img src="./images/navicon.png" id="navicon" onclick="openNav()""><!--The menu symbol-->
+	</div>
+
+	<a href="javascript:window.open('http://leppu.tumblr.com/');"><img id="tumblr" src="./images/tumblr.png"></a> <!--Leppu's Tumblr-->
+	<a href="javascript:window.open('https://twitter.com/petra_nordlund');"><img id="twitter" src="./images/twitter.png"></a> <!--Leppu's Twitter-->
+	<a href="javascript:window.open('http://www.praguerace.com/rss.php');"><img id="rss" src="./images/rss.png"></a> <!--Hiveworks's RSS--> <!--TBH I have no idea about how RSS works or how to use it-->
+	<a href="javascript:window.open('https://www.patreon.com/praguerace');"><img id="patreon" src="./images/patreon.png"></a> <!--Leppu's Patreon--> <!--Please go donate!-->
+
+	<div id="vertiBar"></div> <!--The side bar thing-->
+
+	<img id="logo" src="./images/doofR.png"> <!--The werewolf face-->
+
+	<div class="sidenav" id="sidepanel"> <!--The sidenav itself-->
+		<br><br><br><br><br> <!--Highly sophisticated methods of spacing-->
+		<h1><a href="javascript:void(0)" id="closebtn" onclick="closeNav()">&times;</a></h1>
+		<h2><a href="/subscribe.html">Subscribe to updates</a></h2>
+		<br><br><br><br>
+		<h2><a href="/login.html">Modify your settings</a></h2>
+		<br><br><br><br>
+		<h2><a href="javascript:window.open('http://www.praguerace.com/');">Read the comic!</a></h2>
+		<br><br><br><br>
+		<h2><a href="/about">About this</a></h2>
+	</div>
+
+	<div id="spoilers"> <!--The last page spoiler thing-->
+		<h1><a href="javascript:void(0)"onclick="closeSpoiler()">&times;</a></h1>
+		<img id="spoiler" title="Couldn't find the panel. Error!">
+	</div>
+
+	<div class="notMenu"> <!--The body of the page-->
+		<div <table border="0" class="table"> <!--For organisation-->
+			<tr>
+				<td><h1>Last updated on:</h1></td>
+				<td><h1 id="lad">No data yet.</h1></td> <!--LAD = last update date-->
+			</tr>
+			<br>
+			<tr>
+				<td><h1>Last update panel:</h1></td>
+				<td><h1><a href="javascript:openSpoiler();">Show</a></h1></td>
+			</tr>
+			<br>
+			<tr>
+				<td><h1>Last update title:</h1></td>
+				<td><h1 id="lat">No data yet.</h1></td> <!--LAT = last update title-->
+			</tr>
+			<br>
+			<tr>
+				<td><h1>Current status:</h1></td>
+				<td><h1 id="status">Waiting for start.</h1></td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>
