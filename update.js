@@ -5,6 +5,7 @@ var fs = require("fs");
 var title = fs.readFileSync("./update.txt").toString().split(",")[1]; //stores the page's title
 
 client.on("fetch", function(){ //when client.fetch() is called
+	title = fs.readFileSync("./update.txt").toString().split(",")[1];
 	if(client.title != title) { //if the title changed - new page!
 		var date = new Date();
 		var time = date.getUTCHours() + ":" + date.getUTCMinutes() + " " +
