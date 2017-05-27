@@ -21,6 +21,9 @@ This is a website and service for notifiying readers of the comic Prague Race
 when the comic updates and a new page comes out.
 
 
+### Technical details:
+
+
 The system serves the website from the main directory (V3) using the server.js
 script, while crawling the praguerace.com website and checking for new pages
 using the update.js script. Both scripts are built in Node.js V0.10.29.
@@ -47,4 +50,4 @@ The users folder contains all the website's users' data and should NOT be
 tampered with in ANY case. File contents are encrypted and MUST NOT be touched.
 
 
-# **DO NOT RENAME OR CHANGE THE LOCATIONS OF ANY FILES!**
+### **DO NOT RENAME OR CHANGE THE LOCATIONS OF ANY FILES!**
