@@ -153,12 +153,17 @@ http.createServer(function(request, response) { //on every request to the server
 				response.end(file);
 			}
 			else if(request.url.toString().split(".")[1] == "ico") {
-				response.writeHead(200, {"Content-Type": "image/icon"});
+				response.writeHead(200, {"Content-Type": "image/x-icon"});
 				var file = fs.readFileSync("." + request.url);
 				response.end(file);
 			}
 			else if(request.url.toString().split(".")[1] == "jpg") {
 				response.writeHead(200, {"Content-Type": "image/jpg"});
+				var file = fs.readFileSync("." + request.url);
+				response.end(file);
+			}
+			else if(request.url.toString().split(".")[1] == "css") { //css styleshits
+				response.writeHead(200, {"Content-Type": "text/css"});
 				var file = fs.readFileSync("." + request.url);
 				response.end(file);
 			}
