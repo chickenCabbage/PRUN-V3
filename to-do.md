@@ -6,4 +6,4 @@
 * Add "about.html" page.
 * **FIX THE CSS, ADD MEDIA QUERIES**
 * Show favicon rather than download it.
-* _Get Hiveworks' time of upload.
+* _Get Hiveworks' time of upload._
