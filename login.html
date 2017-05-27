@@ -160,6 +160,10 @@
 						document.getElementById("warn").innerHTML = "This user doesn't exist!";
 						document.getElementById("warn").style.opacity = "1";
 					break;
+					case "verify":
+						document.getElementById("warn").innerHTML = "You need to verify your email before logging in.";
+						document.getElementById("warn").style.opacity = "1";
+					break;
 
 					default: //error
 						document.getElementById("warn").innerHTML = "A server error occured:\n" + result;

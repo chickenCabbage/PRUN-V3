@@ -84,15 +84,30 @@ function authLogin(request, response) { //on every login attempt
 			}
 		} //end try
 		catch(err) {
-			if(err.code == "ENOENT") { //if there's no such file
-				//this user doesn't exist yet or you haven't verified your email
-				response.writeHead(200, {"Content-Type": "text/plain"});
-				response.end("username,");
+			try {
+				fs.readFileSync("./users/" + name + ".unv");
+				if(err.code == "ENOENT") { //the .usr wasn't found but the .unv was
+					//the email hasn't been verified
+					response.writeHead(200, {"Content-Type": "text/plain"});
+					response.end("verify,");
+				}
+				else { //any other error
+					response.writeHead(500, {"Content-Type": "text/plain"});
+					response.end(err + ",");
+					console.log("An error occured on login! " + err + "\nUser: " + name);
+				}
 			}
-			else { //any other error
-				response.writeHead(500, {"Content-Type": "text/plain"});
-				response.end(err = ",");
-				console.log("An error occured on login! " + err + "\nUser: " + name);
+			catch {
+					if(err.code == "ENOENT") { //if there's no such file
+					//this user doesn't exist yet or you haven't verified your email
+					response.writeHead(200, {"Content-Type": "text/plain"});
+					response.end("username,");
+				}
+				else { //any other error
+					response.writeHead(500, {"Content-Type": "text/plain"});
+					response.end(err + ",");
+					console.log("An error occured on login! " + err + "\nUser: " + name);
+				}
 			}
 		} //end catch
 	}); //end request.on("end", function() {})
