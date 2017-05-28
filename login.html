@@ -19,7 +19,7 @@
 		//// POST DATA TO THE SERVER //////////////////////////////////////////////////////////////
 
 		function post() {
-			var name = document.getElementById("name").value;
+			var name = document.getElementById("name").value.toLowerCase();
 			var password = document.getElementById("pw").value;
 			jQuery.post("/login", {username: name, pass: password}, function(result) {
 			switch(result.split(",")[0]) {
