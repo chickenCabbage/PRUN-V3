@@ -19,7 +19,7 @@ updates. PRUN's maximal latency is 30 seconds, while readers can get to
 PRUN doesn't require an external program downloaded from who-knows-where,
 and will give you a shoutout over e-mail wherever and whenever. It's pretty
 handy, and very on-the-go. No app, no software, no download.  
-PRUN has an awesome website I made by myself with my very awesome CSS skills
+PRUN has an awesome website we made by ourselves with our very awesome CSS skills
 and it gives you information about the last update, such as the title, time,
 and the latest comic page. It even has notifications, if you're using Chrome!
 RSS readers don't have cool websites amirite?  
@@ -60,4 +60,4 @@ The users folder contains all the website's users' data and should NOT be
 tampered with in ANY case. File contents are encrypted and MUST NOT be touched.
 
 
-### **DO NOT RENAME OR CHANGE ANY FILES OR THEIR LOCATIONS!**
+### DO NOT RENAME OR CHANGE ANY FILES OR THEIR LOCATIONS!
