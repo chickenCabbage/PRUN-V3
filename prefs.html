@@ -20,7 +20,6 @@
 		window.onLoad = check();
 
 		function check() {
-			alert(document.cookie);
 			if(document.cookie.toString().length == 0 || document.cookie.toString() == "null") {
 				if(confirm("You aren't logged in, and you won't be able to access this page until you log in. Log in now?")) {
 					window.location = "/login.html";
@@ -38,7 +37,6 @@
 							password = result.split(",")[1];
 							document.cookie = name + "," + password + "; path=/prefs.html";
 							document.getElementById("warn").style.opacity = "0";
-							window.location = "/prefs.html";
 						break;
 						case "password":
 							if(confirm("Your password/username is incorrect, and you won't\n" +
@@ -83,6 +81,25 @@
 						document.cookie = name + "," + password + "; path=/prefs.html";
 						document.getElementById("warn").style.opacity = "0";
 					break;
+					case "password":
+						if(confirm("Your password/username is incorrect, and you won't\n" +
+							"be able to access this page until you log in\n. Log in now?")) {
+							window.location = "/login.html";
+						}
+						else {
+							window.location = "/";
+						}
+					break;
+					case "username":
+						if(confirm("Your username credentials doesn't exist, and you won't\n" +
+							"be able to access this page until you log in\n. Log in now?")) {
+							window.location = "/login.html";
+						}
+						else {
+							window.location = "/";
+						}
+					break;
+
 					default:
 						alert("A server error occured. When you press \"OK\" the page will be refreshed." +
 							"\nError: " + result);
@@ -93,9 +110,7 @@
 		}
 
 		function logOut() {
-			alert(document.cookie);
 			document.cookie = "; path=/prefs.html";
-			alert(document.cookie);
 			window.location = "/login.html";
 		}
 	</script>
