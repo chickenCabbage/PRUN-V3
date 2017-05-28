@@ -2,6 +2,10 @@ body {
 	font-family: "Trebuchet MS", "Courier New";
 	text-align: center;
 }
+h1 {
+	font-size: 1.9em;
+}
+
 .topMenu {
 	width: 100%;
 	height: 12%;
