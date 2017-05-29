@@ -3,28 +3,12 @@
 <meta charset="UTF-8">
 <head>
 	<title>Prague Race Updates</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="/resources/style.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">//jQuery</script>
+	<script src="/resources/gui.js"></script>
 	<script>
 		var updateText;
 		var lastCheckTime = 0;
-
-		//// ALL THE ANIMATED DIVS ////////////////////////////////////////////////////////////////
-
-		function openNav() { //open the sidenav
-			document.getElementById("sidepanel").style.width = "26%";
-			document.getElementById("navicon").style.opacity = "0";
-		}
-		function closeNav() { //close the sidenav
-			document.getElementById("sidepanel").style.width = "0%";
-			document.getElementById("navicon").style.opacity = "1";
-		}
-		function openSpoiler() { //open the last page image
-			document.getElementById("spoilers").style.width = "100%";
-		}
-		function closeSpoiler() { //close the last page image
-			document.getElementById("spoilers").style.width = "0%";
-		}
 
 		//// NOTIFICATIONS ////////////////////////////////////////////////////////////////////////
 
@@ -103,7 +87,7 @@
 
 	<div id="vertiBar"></div> <!--The side bar thing-->
 
-	<img id="logo" src="./images/doofR.png"> <!--The werewolf face-->
+	<img id="logo" src="./images/doofR.png" onclick="javascript:location.reload()"> <!--The werewolf face-->
 
 	<div class="sidenav" id="sidepanel"> <!--The sidenav itself-->
 		<br><br><br><br> <!--Highly sophisticated methods of spacing-->

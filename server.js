@@ -174,6 +174,11 @@ http.createServer(function(request, response) { //on every request to the server
 				var file = fs.readFileSync("." + request.url);
 				response.end(file);
 			}
+			else if(request.url.toString().split(".")[1] == "js") { //js files
+				response.writeHead(200, {"Content-Type": "application/javascript"});
+				var file = fs.readFileSync("." + request.url);
+				response.end(file);
+			}
 			else if(request.url.toString().indexOf("verify?name=") != -1) {
 			//if someone is trying to verify their mail
 				try {

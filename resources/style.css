@@ -2,9 +2,6 @@ body {
 	font-family: "Trebuchet MS", "Courier New";
 	text-align: center;
 }
-h1 {
-	font-size: 1.9em;
-}
 
 .topMenu {
 	width: 100%;
@@ -31,6 +28,7 @@ h1 {
 	width: 15%;
 	z-index: 2;
 	position: fixed;
+	cursor: pointer;
 }
 
 #twitter { /* #twitter ayy lmao */
