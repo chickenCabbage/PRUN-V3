@@ -130,17 +130,22 @@
 	</div>
 
 	<div class="notMenu">
-		<input type="button" value="Log out" onclick="logOut()">
-		<br><br>
-		<input type="button" value="Change password" onclick="window.location = '/changePass.html'">
 		<br><br>
 		<form action="javascript:post();">
-			<input type="checkbox" name="updates">Recieve emails when Prague Race updates
+			<input type="checkbox" name="updates">
+			<label for="updates">Receive emails when Prague Race updates</label>
 			<br><br>
-			<input type="checkbox" name="devlogs">Send me developer updates from the website
+			<input type="checkbox" name="devlogs">
+			<label for="devlogs">Receive developer updates from the website</label>
 			<br><br><br>
 			<input type="submit" value="Submit">
 		</form>
+		<br><br><br>
+		<input type="button" value="Change password" onclick="">
+		&emsp;<input type="button" value="Log out" onclick="logOut()">
+		<br><br><hr>
+		<div id="passbar">
+		</div>
 	</div>
 </body>
 </html>
