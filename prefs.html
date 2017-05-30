@@ -3,6 +3,7 @@
 <head>
 	<title>Edit settings</title>
 	<link rel="stylesheet" type="text/css" href="/resources/style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">//jQuery</script>
 	<script src="/resources/gui.js"></script>
 	<script>
 
@@ -21,17 +22,16 @@
 			}
 			else {
 				var name = document.cookie.split(",")[0];
-				var pass = document.cookie.split(",")[1];
+				var password = document.cookie.split(",")[1];
 				jQuery.post("/login", {username: name, pass: password}, function(result) {
 					switch(result.split(",")[0]) {
 						case "complete":
-							password = result.split(",")[1];
-							document.cookie = name + "," + password + "; path=/prefs.html";
-							document.getElementById("warn").style.opacity = "0";
 						break;
 						case "password":
+						alert("result: " + result);
+						alert("cookies:" + document.cookie);
 							if(confirm("Your password/username is incorrect, and you won't\n" +
-								"be able to access this page until you log in\n. Log in now?")) {
+								"be able to access this page until you log in.\nLog in now?")) {
 								window.location = "/login.html";
 							}
 							else {
@@ -40,7 +40,7 @@
 						break;
 						case "username":
 							if(confirm("Your username credentials doesn't exist, and you won't\n" +
-								"be able to access this page until you log in\n. Log in now?")) {
+								"be able to access this page until you log in.\nLog in now?")) {
 								window.location = "/login.html";
 							}
 							else {
