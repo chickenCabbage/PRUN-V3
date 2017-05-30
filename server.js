@@ -79,6 +79,7 @@ function authLogin(request, response) { //on every login attempt
 		var name = body.split("=")[1].split("&")[0].replace("%40", "@"); //a little shorter
 		try {
 			//if the given password matches the decypted password from the file
+			console.log(fs.readFileSync("./users/" + name + ".usr") + '\n' + decrypt(fs.readFileSync("./users/" + name + ".usr")) + '\n' + body.split("=")[2] + '\n');
 			if(decrypt(fs.readFileSync("./users/" + name + ".usr")) == body.split("=")[2]) {
 				response.writeHead(200, {"Content-Type": "text/plain"});
 				response.end("complete," + encrypt(body.split("=")[2])); //you're good
