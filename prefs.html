@@ -141,10 +141,20 @@
 			<input type="submit" value="Submit">
 		</form>
 		<br><br><br>
-		<input type="button" value="Change password" onclick="">
+		<input type="button" value="Change password" onclick="togglePW()">
 		&emsp;<input type="button" value="Log out" onclick="logOut()">
 		<br><br><hr>
 		<div id="passbar">
+			<form action="javascript:save();" id="form">
+				<br>
+				<p>Old PW:</p><input class="passChange" type="password" id="oldPW" name="old">
+				<br>
+				<p>New PW:</p><input class="passChange" type="password" id="newPW2" name="new1">
+				<br>
+				<p>Confirm:</p><input class="passChange" type="password" id="newPW2" name="new2">
+				<br><br><br>
+				<input type="submit" id="submit" value="Save">
+			</form>
 		</div>
 	</div>
 </body>

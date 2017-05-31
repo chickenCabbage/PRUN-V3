@@ -12,3 +12,6 @@ function openSpoiler() { //open the last page image
 function closeSpoiler() { //close the last page image
 	document.getElementById("spoilers").style.width = "0%";
 }
+function togglePW() {
+	document.getElementById("passbar").style.opacity = (1 - document.getElementById("passbar").style.opacity).toString();
+}
