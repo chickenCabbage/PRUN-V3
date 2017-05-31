@@ -9,7 +9,17 @@
 
 		//// POST DATA TO THE SERVER //////////////////////////////////////////////////////////////
 
-		//add auto redirect here
+		window.onload = function() {
+			console.log('whoa');
+			var name = document.cookie.split(",")[0];
+			var password = document.cookie.split(",")[1];
+			jQuery.post("/login", {username: name, pass: password, encrypted: true}, function(result) {
+				console.log(result);
+				if(result.indexOf("complete,") == 0) {
+					window.location = "/prefs.html";
+				}
+			});
+		}
 
 		function post() {
 			var name = document.getElementById("name").value.toLowerCase();
