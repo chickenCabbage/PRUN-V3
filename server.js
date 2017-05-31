@@ -85,12 +85,6 @@ function authLogin(request, response) { //on every login attempt
 			password = decrypt(password);
 			bool = true;
 		}
-		console.log();
-		light(bool);
-		light(name);
-		light(password);
-		light(body);
-		console.log();
 
 		try {
 			//if the given password matches the decypted password from the file
