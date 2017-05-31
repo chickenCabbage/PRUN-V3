@@ -23,7 +23,7 @@
 			else {
 				var name = document.cookie.split(",")[0];
 				var password = document.cookie.split(",")[1];
-				jQuery.post("/login", {username: name, pass: password}, function(result) {
+				jQuery.post("/login", {username: name, pass: password, encrypted: true}, function(result) {
 					switch(result.split(",")[0]) {
 						case "complete":
 						break;

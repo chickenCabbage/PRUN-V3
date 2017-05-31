@@ -18,8 +18,10 @@
 					|| pw1.indexOf(":") != -1
 					|| pw1.indexOf(" ") != -1
 					|| pw1.indexOf("'") != -1
-					|| pw1.indexOf("\\") != -1
 					|| pw1.indexOf("*") != -1
+					|| pw1.indexOf("&") != -1
+					|| pw1.indexOf("=") != -1
+					|| pw1.indexOf("\\") != -1
 					|| pw1.indexOf("\"") != -1) { //check for sh*t
 					document.getElementById("warn").innerHTML = "Invalid password.";
 					document.getElementById("warn").style.opacity = "1";

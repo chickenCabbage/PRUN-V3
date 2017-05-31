@@ -4,7 +4,7 @@ var colors = require("colors"); //awsome console
 var algorithm = "aes-256-ctr"; //encryption algorithm
 var http = require("http"); //basic HTTP shit
 var fs = require("fs"); //for file I/O
-var port = 8887;
+var port = 8888;
 var body = ""; //for POST data
 
 var key = "wu7 7)(3 f*ck N0de.jS"; //the AES encryption key
@@ -77,12 +77,26 @@ function authLogin(request, response) { //on every login attempt
 	});
 	request.on("end", function() { //when you're done
 		var name = body.split("=")[1].split("&")[0].replace("%40", "@"); //a little shorter
+		var password = body.split("=")[2].toString().split("&")[0];
+		var bool = body.split("=")[3];
+		if(bool == "true") {
+			//if it's from a prefs.html login it'll be encrypted
+			//if it's from a login.html login it'll be plaintext
+			password = decrypt(password);
+			bool = true;
+		}
+		console.log();
+		light(bool);
+		light(name);
+		light(password);
+		light(body);
+		console.log();
+
 		try {
 			//if the given password matches the decypted password from the file
-			console.log(fs.readFileSync("./users/" + name + ".usr") + '\n' + decrypt(fs.readFileSync("./users/" + name + ".usr")) + '\n' + body.split("=")[2] + '\n');
-			if(decrypt(fs.readFileSync("./users/" + name + ".usr")) == body.split("=")[2]) {
+			if(decrypt(fs.readFileSync("./users/" + name + ".usr")) == password) {
 				response.writeHead(200, {"Content-Type": "text/plain"});
-				response.end("complete," + encrypt(body.split("=")[2])); //you're good
+				response.end("complete," + encrypt(password)); //you're good
 			}
 			else { //if it doesn't match
 				response.writeHead(200, {"Content-Type": "text/plain"});

@@ -12,7 +12,7 @@
 		function post() {
 			var name = document.getElementById("name").value.toLowerCase();
 			var password = document.getElementById("pw").value;
-			jQuery.post("/login", {username: name, pass: password}, function(result) {
+			jQuery.post("/login", {username: name, pass: password, encrypted: false}, function(result) {
 			switch(result.split(",")[0]) {
 					case "complete":
 						password = result.split(",")[1];
