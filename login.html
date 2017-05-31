@@ -13,10 +13,11 @@
 			var name = document.getElementById("name").value.toLowerCase();
 			var password = document.getElementById("pw").value;
 			jQuery.post("/login", {username: name, pass: password, encrypted: false}, function(result) {
-			switch(result.split(",")[0]) {
+				switch(result.split(",")[0]) {
 					case "complete":
 						password = result.split(",")[1];
 						document.cookie = name + "," + password + "; path=/prefs.html";
+						document.cookie = name + "," + password + "; path=/login.html";
 						document.getElementById("warn").style.opacity = "0";
 						window.location = "/prefs.html";
 					break;
