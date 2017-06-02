@@ -6,7 +6,6 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">//jQuery</script>
 	<script src="/resources/gui.js"></script>
 	<script>
-
 		//// AUTHENTICATE /////////////////////////////////////////////////////////////////////////
 
 		window.onLoad = check();
@@ -58,6 +57,12 @@
 			}
 		}
 
+		function logOut() {
+			document.cookie = "; path=/prefs.html";
+			document.cookie = "; path=/login.html";
+			window.location = "/login.html";
+		}
+
 		//// SAVE DATA TO THE SERVER //////////////////////////////////////////////////////////////
 
 		function post() {
@@ -100,10 +105,49 @@
 			});
 		}
 
-		function logOut() {
-			document.cookie = "; path=/prefs.html";
-			document.cookie = "; path=/login.html";
-			window.location = "/login.html";
+		function checkPW() {
+			var pw1 = document.getElementById("new1").value;
+			var pw2 = document.getElementById("new2").value;
+			if (pw1 == pw2) {
+				if(pw1.indexOf(",") != -1
+					|| pw1.indexOf(":") != -1
+					|| pw1.indexOf(" ") != -1
+					|| pw1.indexOf("'") != -1
+					|| pw1.indexOf("*") != -1
+					|| pw1.indexOf("&") != -1
+					|| pw1.indexOf("=") != -1
+					|| pw1.indexOf("\\") != -1
+					|| pw1.indexOf("\"") != -1) { //check for sh*t
+					document.getElementById("warn").innerHTML = "Invalid password.";
+					document.getElementById("warn").style.opacity = "1";
+					document.getElementById("submit").disabled = true;
+				}
+				else {
+					if (pw1.length > 6) {
+						document.getElementById("warn").style.opacity = "0";
+						document.getElementById("submit").disabled = false;
+					}
+					else {
+						document.getElementById("warn").innerHTML = "Please use a password with more characters. (> 6)";
+						document.getElementById("warn").style.opacity = "1";
+						document.getElementById("submit").disabled = true;
+					}
+				}
+			}
+			else {
+				document.getElementById("warn").innerHTML = "Passwords don't match!";
+				document.getElementById("warn").style.opacity = "1";
+				document.getElementById("submit").disabled = true;
+			}
+		}
+
+		function changePW() {
+			var name = document.cookie.split(",")[0];
+			var oldPass = document.getElementById("oldPW").value;
+			var newPass = document.getElementById("newPW1").value;
+			jQuery.post("/newPass", {username: name, pass: oldPass, new: newPass, encrypted: true}, function(result) {
+			console.log(result);
+			});
 		}
 	</script>
 </head>
@@ -146,15 +190,17 @@
 		&emsp;<input type="button" value="Log out" onclick="logOut()">
 		<br><br><hr>
 		<div id="passbar">
-			<form action="javascript:save();" id="form">
+			<form action="javascript:changePW();" id="form">
 				<br>
-				<p>Old PW:</p><input class="passChange" type="password" id="oldPW" name="old">
+				<p>Old PW:</p><input class="passChange" type="password" id="oldPW" name="old" oninput="checkPW()">
 				<br>
-				<p>New PW:</p><input class="passChange" type="password" id="newPW2" name="new1">
+				<p>New PW:</p><input class="passChange" type="password" id="newPW2" name="new1" oninput="checkPW()">
 				<br>
-				<p>Confirm:</p><input class="passChange" type="password" id="newPW2" name="new2">
+				<p>Confirm:</p><input class="passChange" type="password" id="newPW2" name="new2" oninput="checkPW()">
 				<br><br><br>
 				<input type="submit" id="submit" value="Save">
+				<br><br>
+				<div id="warn">Lorem ipsum yo</div>
 			</form>
 		</div>
 	</div>

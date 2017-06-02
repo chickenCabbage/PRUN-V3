@@ -223,6 +223,9 @@ http.createServer(function(request, response) { //on every request to the server
 				response.writeHead(200, {"Content-Type": "text/plain"});
 				authLogin(request, response);
 			}
+			else if(request.url == "/newPass") {
+				replacePW();
+			}
 			else { //just a request for a normal file
 				var file = fs.readFileSync("." + request.url); //read the requested file
 				response.writeHead(200, {"Content-Type": "text/html"});
