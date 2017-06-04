@@ -14,4 +14,5 @@ function closeSpoiler() { //close the last page image
 }
 function togglePW() {
 	document.getElementById("passbar").style.opacity = (1 - document.getElementById("passbar").style.opacity).toString();
+	document.getElementById("hr").style.opacity = (1 - document.getElementById("hr").style.opacity).toString();
 }

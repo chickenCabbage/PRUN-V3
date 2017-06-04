@@ -50,6 +50,8 @@
 		function post() {
 			var name = document.getElementById("name").value;
 			var password = document.getElementById("pw1").value;
+			var pw1 = password;
+			var pw2 = document.getElementById("pw2").value;
 
 			if(pw1.indexOf(",") != -1
 				|| pw1.indexOf(":") != -1

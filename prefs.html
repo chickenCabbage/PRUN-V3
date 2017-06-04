@@ -65,13 +65,52 @@
 
 		//// SAVE DATA TO THE SERVER //////////////////////////////////////////////////////////////
 
-		function post() {
+		function postPrefs() {
 			var name = document.cookie.split(",")[0];
 			var password = document.cookie.split(",")[1];
 			var devLogs = document.getElementById("devLogs").value;
 			var updateMails = document.getElementById("updateMails").value;
 
-			jQuery.post("/save", {username: name, pass: password}, function(result) {
+			jQuery.post("/save", {username: name, pass: password, encrypted: true}, function(result) {
+				switch(result) {
+					case "complete":
+						document.cookie = name + "," + password + "; path=/prefs.html";
+						document.getElementById("warn").style.opacity = "0";
+					break;
+					case "password":
+						if(confirm("Your password/username is incorrect, and you won't\n" +
+							"be able to access this page until you log in\n. Log in now?")) {
+							window.location = "/login.html";
+						}
+						else {
+							window.location = "/";
+						}
+					break;
+					case "username":
+						if(confirm("Your username credentials doesn't exist, and you won't\n" +
+							"be able to access this page until you log in\n. Log in now?")) {
+							window.location = "/login.html";
+						}
+						else {
+							window.location = "/";
+						}
+					break;
+
+					default:
+						alert("A server error occured. When you press \"OK\" the page will be refreshed." +
+							"\nError: " + result);
+						window.location.reload();
+					break;
+				}
+			});
+		}
+
+		function postPW() {
+			var name = document.cookie.split(",")[0];
+			var password = document.cookie.split(",")[1];
+			var newPass = document.getElementById("newPW1").value;
+
+			jQuery.post("/newPass", {username: name, pass: password, olga: newPass, encrypted: true}, function(result) {
 				switch(result) {
 					case "complete":
 						document.cookie = name + "," + password + "; path=/prefs.html";
@@ -106,8 +145,8 @@
 		}
 
 		function checkPW() {
-			var pw1 = document.getElementById("new1").value;
-			var pw2 = document.getElementById("new2").value;
+			var pw1 = document.getElementById("newPW1").value;
+			var pw2 = document.getElementById("newPW2").value;
 			if (pw1 == pw2) {
 				if(pw1.indexOf(",") != -1
 					|| pw1.indexOf(":") != -1
@@ -176,7 +215,7 @@
 
 	<div class="notMenu">
 		<br><br>
-		<form action="javascript:post();">
+		<form action="javascript:postPrefs();">
 			<input type="checkbox" name="updates">
 			<label for="updates">Receive emails when Prague Race updates</label>
 			<br><br>
@@ -188,20 +227,22 @@
 		<br><br><br>
 		<input type="button" value="Change password" onclick="togglePW()">
 		&emsp;<input type="button" value="Log out" onclick="logOut()">
-		<br><br><hr>
+		<br><br><hr id="hr">
 		<div id="passbar">
-			<form action="javascript:changePW();" id="form">
+			<form action="javascript:postPW();" id="form">
 				<br>
 				<p>Old PW:</p><input class="passChange" type="password" id="oldPW" name="old" oninput="checkPW()">
 				<br>
-				<p>New PW:</p><input class="passChange" type="password" id="newPW2" name="new1" oninput="checkPW()">
+				<p>New PW:</p><input class="passChange" type="password" id="newPW1" name="new1" oninput="checkPW()">
 				<br>
 				<p>Confirm:</p><input class="passChange" type="password" id="newPW2" name="new2" oninput="checkPW()">
 				<br><br><br>
-				<input type="submit" id="submit" value="Save">
+				<input type="submit" id="submit" value="Save" disabled="true">
 				<br><br>
-				<div id="warn">Lorem ipsum yo</div>
 			</form>
+		<br>
+		<div id="warn">Lorem ipsum yo</div>
+		<br>
 		</div>
 	</div>
 </body>

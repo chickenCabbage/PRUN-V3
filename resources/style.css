@@ -122,8 +122,9 @@ input[type=button] {
 	font-family: "Consolas", "Courier New";
 }
 
-hr {
-	width: 50%;
+#hr {
+	width: 100%;
+	opacity: 0;
 }
 
 #warn {
@@ -165,7 +166,6 @@ hr {
 
 #passbar {
 	width: 40%;
-	height: 60%;
 	left: 30%;
 	background-color: rgba(202, 202, 202, 0.3);
 	position: absolute;

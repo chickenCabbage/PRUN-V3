@@ -9,10 +9,10 @@ var body = ""; //for POST data
 
 var key = "wu7 7)(3 f*ck N0de.jS"; //the AES encryption key
 
-function harsh(text) {
+function errPrint(text) {
 	console.log("\n" + colors.red("ERROR: ") + text + "\n");
 }
-function light(text) {
+function wrnPrint(text) {
 	console.log(colors.yellow("WARNING: ") + text);
 }
 
@@ -44,27 +44,27 @@ function newUser(request, response) { //when a user is trying to subscribe
 					//run verify.jar with the name and encrypted PW of the new user
 					exec(cmd, function(error, stdout, stderr){
 						if(stdout != "") { //if there is output
-							light("Verify.jar says: " + stdout);
+							wrnPrint("Verify.jar says: " + stdout);
 						}
 						if(stderr != "") { //if there is errput
-							harsh(stderr); //print it too
+							errPrint(stderr); //print it too
 						}
 					}); //end if
 					response.writeHead(200, {"Content-Type": "text/plain"});
 					response.end("complete"); //if you made it this far all's cool, things executed well
-					light("Added user: " + name);
+					wrnPrint("Added user: " + name);
 				} //if the file does exist but it did a "wrong step" and died
 				else { //general error
 					response.writeHead(500, {"Content-Type": "text/plain"});
 					response.end(err);
-					harsh("An error occured on signup! " + err + "\nUser: " + name);
+					errPrint("An error occured on signup! " + err + "\nUser: " + name);
 				} //end if-else
 			} //end catch
 		} //end try
 		catch(err) { //this sucks
 			response.writeHead(500, {"Content-Type": "text/plain"});
 			response.end(err);
-			harsh("An error occured on signup! " + err + "\nUser: " + name);
+			errPrint("An error occured on signup! " + err + "\nUser: " + name);
 
 		} //end catch
 	}); //end request.on("end", function() {})
@@ -110,7 +110,7 @@ function authLogin(request, response) { //on every login attempt
 				else { //any other error
 					response.writeHead(500, {"Content-Type": "text/plain"});
 					response.end(err + ",");
-					harsh("An error occured on login! " + err + "\nUser: " + name);
+					errPrint("An error occured on login! " + err + "\nUser: " + name);
 				}
 			}
 			catch(err2) {
@@ -122,12 +122,26 @@ function authLogin(request, response) { //on every login attempt
 				else { //any other error
 					response.writeHead(500, {"Content-Type": "text/plain"});
 					response.end(err + ",");
-					harsh("An error occured on login! " + err + "\nUser: " + name);
+					errPrint("An error occured on login! " + err + "\nUser: " + name);
 				}
 			}
 		} //end catch
 	}); //end request.on("end", function() {})
 } //end authLogin
+
+function replacePW(request, response) {
+	body = ""; //THIS IS IMPORTANT SO PAST CREDENTIALS DON'T GET CARRIED OVER
+	request.on("data", function(chunk) { //read the POST data
+		body += chunk;
+	});
+	request.on("end", function() { //when you're done
+		errPrint(body)
+		console.log(body.split("=")[1].split("&")[0].toString().replace("%40", "@"));
+		console.log(decrypt(body.split("=")[2].toString().split("&")[0]));
+		console.log(body.split("=")[3].toString().split("&")[0]);
+		console.log(body.split("=")[4]);
+	});
+}
 
 //// ADD SUPPORT FOR SAVING PREFS HERE
 
@@ -135,7 +149,7 @@ function encrypt(text) { //encrypt text
 	var cipher = crypto.createCipher(algorithm, key);
 	var crypted = cipher.update(text,'utf8','hex'); //take if from standard text
 	crypted += cipher.final('hex'); //to hexa
-	//DO NOT CHANGE ANYTHING IN THE ENCODING OR YOU WILL BE DEAD BY DAYLIGHT I SWEAR TO STALLMAN
+	//DO NOT CHANGE ANYTHING IN THE ENCODING OR YOU WILL BE DEAD BY DAYwrnPrint I SWEAR TO STALLMAN
 	return crypted;
 }
 
@@ -205,7 +219,7 @@ http.createServer(function(request, response) { //on every request to the server
 					}
 				}
 				catch(err) {
-					harsh("Error in email verification: " + err);
+					errPrint("Error in email verification: " + err);
 				}
 			}
 			else {
@@ -224,7 +238,7 @@ http.createServer(function(request, response) { //on every request to the server
 				authLogin(request, response);
 			}
 			else if(request.url == "/newPass") {
-				replacePW();
+				replacePW(request, response);
 			}
 			else { //just a request for a normal file
 				var file = fs.readFileSync("." + request.url); //read the requested file
@@ -239,7 +253,7 @@ http.createServer(function(request, response) { //on every request to the server
 			response.end("<h1>Oops.</h1>" +
 				"<p>There was an error, the page you're looking for can't be found.</p>" +
 				"<p>HTTP error 404.</p>");
-			light("Served 404 for " + request.url);
+			wrnPrint("Served 404 for " + request.url);
 		}
 		else if(err == "403") {
 			response.writeHead(403, {"Content-Type": "text/html"});
@@ -263,7 +277,7 @@ http.createServer(function(request, response) { //on every request to the server
 			response.end("<h1>Oops.</h1>" +
 				"<p>There was an error.</p>" +
 				"<p>JavaScript error code: " + err.code + "</p>");
-			harsh("Served 500 for error: " + err + "\nRequest: " + request.url);
+			errPrint("Served 500 for error: " + err + "\nRequest: " + request.url);
 		}
 	}
 }).listen(port);
