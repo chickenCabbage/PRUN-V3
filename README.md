@@ -30,6 +30,8 @@ _Easy. Sleek. Everywhere._
 
 
 
+And don't mind Olga. She's just chilling.
+
 ### Technical details:
 
 
