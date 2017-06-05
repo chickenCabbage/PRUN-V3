@@ -192,6 +192,10 @@ function replacePW(request, response) {
 	});
 }
 
+savePrefs() {
+	
+}
+
 //// ADD SUPPORT FOR SAVING PREFS HERE
 
 function encrypt(text) { //encrypt text
@@ -298,6 +302,9 @@ http.createServer(function(request, response) { //on every request to the server
 			}
 			else if(request.url == "/newPass") {
 				replacePW(request, response);
+			}
+			else if(request.url == "/save") {
+				savePrefs();
 			}
 			else { //just a request for a normal file
 				var file = fs.readFileSync("." + request.url); //read the requested file

@@ -70,12 +70,14 @@
 		function postPrefs() {
 			var name = document.cookie.split(",")[0];
 			var password = document.cookie.split(",")[1];
-			var devLogs = document.getElementById("devlogs").value;
-			var updateMails = document.getElementById("updateMails").value;
+			var updatemails = document.getElementById("mailing").checked;
+			var devlogs = document.getElementById("devlogs").checked;
 
 			jQuery.post("/save", {
 				username: name,
 				pass: password,
+				mails: updatemails,
+				logs: devlogs,
 				encrypted: true
 			}, function(result) {
 				switch(result.split(",")[0]) {
@@ -239,10 +241,10 @@
 	<div class="notMenu">
 		<br><br>
 		<form action="javascript:postPrefs();">
-			<input type="checkbox" name="updates">
+			<input type="checkbox" name="updates" id="mailing">
 			<label for="updates">Receive emails when Prague Race updates</label>
 			<br><br>
-			<input type="checkbox" name="devlogs">
+			<input type="checkbox" name="devlogs" id="devlogs">
 			<label for="devlogs">Receive developer updates from the website</label>
 			<br><br><br>
 			<input type="submit" value="Submit">
