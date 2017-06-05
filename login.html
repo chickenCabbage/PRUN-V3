@@ -3,17 +3,15 @@
 <head>
 	<title>Log in!</title>
 	<link rel="stylesheet" type="text/css" href="/resources/style.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">//jQuery</script>
+	<script src="/resources/jQuery.js">//jQuery</script>
 	<script src="/resources/gui.js"></script>
 	<script>
 		//// POST DATA TO THE SERVER //////////////////////////////////////////////////////////////
 
 		window.onload = function() {
-			console.log('whoa');
 			var name = document.cookie.split(",")[0];
 			var password = document.cookie.split(",")[1];
 			jQuery.post("/login", {username: name, pass: password, encrypted: true}, function(result) {
-				console.log(result);
 				if(result.indexOf("complete,") == 0) {
 					window.location = "/prefs.html";
 				}

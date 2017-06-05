@@ -3,12 +3,13 @@
 <head>
 	<title>Subscribe!</title>
 	<link rel="stylesheet" type="text/css" href="/resources/style.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">//jQuery</script>
+	<script src="/resources/jQuery.js">//jQuery</script>
 	<script src="/resources/gui.js"></script>
 	<script>
 		//// VALIDATE THE PASSWORD ////////////////////////////////////////////////////////////////
 
 		function checkPW() {
+			var name = document.getElementById("name").value;
 			var pw1 = document.getElementById("pw1").value;
 			var pw2 = document.getElementById("pw2").value;
 
@@ -28,8 +29,15 @@
 				}
 				else {
 					if (pw1.length > 6) {
-						document.getElementById("warn").style.opacity = "0";
-						document.getElementById("submit").disabled = false;
+						if((name.indexOf("@") != -1 || name.indexOf(".") != -1) && name.length > 4) {
+							document.getElementById("warn").style.opacity = "0";
+							document.getElementById("submit").disabled = false;
+						}
+						else {
+							document.getElementById("warn").innerHTML = "Invalid email.";
+							document.getElementById("warn").style.opacity = "1";
+							document.getElementById("submit").disabled = true;
+						}
 					}
 					else {
 						document.getElementById("warn").innerHTML = "Please use a password with more characters. (> 6)";

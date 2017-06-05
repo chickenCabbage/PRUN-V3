@@ -3,7 +3,7 @@
 <head>
 	<title>Edit settings</title>
 	<link rel="stylesheet" type="text/css" href="/resources/style.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">//jQuery</script>
+	<script src="/resources/jQuery.js">//jQuery</script>
 	<script src="/resources/gui.js"></script>
 	<script>
 		//// AUTHENTICATE /////////////////////////////////////////////////////////////////////////
@@ -11,6 +11,7 @@
 		window.onLoad = check();
 
 		function check() {
+
 			if(document.cookie.toString().length == 0 || document.cookie.toString() == "null") {
 				if(confirm("You aren't logged in, and you won't be able to access this page until you log in. Log in now?")) {
 					window.location = "/login.html";
@@ -27,8 +28,6 @@
 						case "complete":
 						break;
 						case "password":
-						alert("result: " + result);
-						alert("cookies:" + document.cookie);
 							if(confirm("Your password/username is incorrect, and you won't\n" +
 								"be able to access this page until you log in.\nLog in now?")) {
 								window.location = "/login.html";
@@ -68,11 +67,11 @@
 		function postPrefs() {
 			var name = document.cookie.split(",")[0];
 			var password = document.cookie.split(",")[1];
-			var devLogs = document.getElementById("devLogs").value;
+			var devLogs = document.getElementById("devlogs").value;
 			var updateMails = document.getElementById("updateMails").value;
 
 			jQuery.post("/save", {username: name, pass: password, encrypted: true}, function(result) {
-				switch(result) {
+				switch(result.split(",")[0]) {
 					case "complete":
 						document.cookie = name + "," + password + "; path=/prefs.html";
 						document.getElementById("warn").style.opacity = "0";
@@ -87,7 +86,7 @@
 						}
 					break;
 					case "username":
-						if(confirm("Your username credentials doesn't exist, and you won't\n" +
+						if(confirm("Your username credential doesn't exist, and you won't\n" +
 							"be able to access this page until you log in\n. Log in now?")) {
 							window.location = "/login.html";
 						}
@@ -107,18 +106,29 @@
 
 		function postPW() {
 			var name = document.cookie.split(",")[0];
-			var password = document.cookie.split(",")[1];
+			var password = document.getElementById("oldPW").value;
 			var newPass = document.getElementById("newPW1").value;
 
-			jQuery.post("/newPass", {username: name, pass: password, olga: newPass, encrypted: true}, function(result) {
-				switch(result) {
+			jQuery.post("/newPass", {username: name, pass: password, olga: newPass, encrypted: false}, function(result) {
+				switch(result.split(",")[0]) {
 					case "complete":
+						password = result.split(",")[1];
 						document.cookie = name + "," + password + "; path=/prefs.html";
-						document.getElementById("warn").style.opacity = "0";
+						window.location.reload();
+					break;
+					case "verify":
+						if(confirm("Your username isn't verified, and you won't\n" +
+							"be able to access this page until you verify your email.\nRefresh now?")) {
+							window.location.reload();
+						}
+						else {
+							window.location = "/";
+						}
 					break;
 					case "password":
+						logOut();
 						if(confirm("Your password/username is incorrect, and you won't\n" +
-							"be able to access this page until you log in\n. Log in now?")) {
+							"be able to access this page until you log in.\nLog in now?")) {
 							window.location = "/login.html";
 						}
 						else {
@@ -126,8 +136,9 @@
 						}
 					break;
 					case "username":
+						logOut();
 						if(confirm("Your username credentials doesn't exist, and you won't\n" +
-							"be able to access this page until you log in\n. Log in now?")) {
+							"be able to access this page until you log in.\nLog in now?")) {
 							window.location = "/login.html";
 						}
 						else {

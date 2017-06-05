@@ -136,29 +136,88 @@ function replacePW(request, response) {
 	});
 	request.on("end", function() { //when you're done
 		errPrint(body)
-		console.log(body.split("=")[1].split("&")[0].toString().replace("%40", "@"));
-		console.log(decrypt(body.split("=")[2].toString().split("&")[0]));
-		console.log(body.split("=")[3].toString().split("&")[0]);
-		console.log(body.split("=")[4]);
+		var name = body.split("=")[1].split("&")[0].replace("%40", "@");
+		var oldp = body.split("=")[2].toString().split("&")[0];
+		var newp = body.split("=")[3].toString().split("&")[0];
+		var bool = (body.split("=")[4] == "true");
+
+		if(bool) {
+			oldp = decrypt(oldp);
+		}
+
+		try {
+			//if the given password matches the decypted password from the file
+			var content = fs.readFileSync("./users/" + name + ".usr")
+			if(decrypt(content) == oldp) {
+				response.writeHead(200, {"Content-Type": "text/plain"});
+
+				fs.writeFileSync("./users/" + name + ".usr", encrypt(newp));
+				response.writeHead(200, {"Content-Type": "text/plain"});
+				response.end("complete," + encrypt(newp)); //you're good
+			}
+			else { //if it doesn't match
+				response.writeHead(200, {"Content-Type": "text/plain"});
+				response.end("password,");
+				//either you typed your mail wrong and there's another user with this mail
+				//or, y'know, you mistyped/forgot your password
+			}
+		} //end try
+		catch(err) {
+			try {
+				fs.readFileSync("./users/" + name + ".unv");
+				if(err.code == "ENOENT") { //the .usr wasn't found but the .unv was
+					//the email hasn't been verified
+					response.writeHead(200, {"Content-Type": "text/plain"});
+					response.end("verify,");
+				}
+				else { //any other error
+					response.writeHead(500, {"Content-Type": "text/plain"});
+					response.end(err + ",");
+					errPrint("An error occured on password change! " + err + "\nUser: " + name);
+				}
+			}
+			catch(err2) {
+				if(err2.code == "ENOENT") { //if there's no such file
+					//this user doesn't exist yet or you haven't verified your email
+					response.writeHead(200, {"Content-Type": "text/plain"});
+					response.end("username,");
+				}
+				else { //any other error
+					response.writeHead(500, {"Content-Type": "text/plain"});
+					response.end(err + ",");
+					errPrint("An error occured on password change! " + err + "\nUser: " + name);
+				}
+			}
+		} //end catch
 	});
 }
 
 //// ADD SUPPORT FOR SAVING PREFS HERE
 
 function encrypt(text) { //encrypt text
-	var cipher = crypto.createCipher(algorithm, key);
-	var crypted = cipher.update(text,'utf8','hex'); //take if from standard text
-	crypted += cipher.final('hex'); //to hexa
-	//DO NOT CHANGE ANYTHING IN THE ENCODING OR YOU WILL BE DEAD BY DAYwrnPrint I SWEAR TO STALLMAN
-	return crypted;
+	try {
+		var cipher = crypto.createCipher(algorithm, key);
+		var crypted = cipher.update(text,'utf8','hex'); //take if from standard text
+		crypted += cipher.final('hex'); //to hexa
+		//DO NOT CHANGE ANYTHING IN THE ENCODING OR YOU WILL BE DEAD BY DAYwrnPrint I SWEAR TO STALLMAN
+		return crypted;
+	}
+	catch(err) {
+		return null;
+	}
 }
 
 function decrypt(text) { //decrypt text
-	var decipher = crypto.createDecipher(algorithm, key);
-	var decrypted = decipher.update(text.toString(),'hex','utf8'); //take it from hexa
-	decrypted += decipher.final('utf8'); //to standard text
-	//SAME GOES HERE
-	return decrypted
+	try {
+		var decipher = crypto.createDecipher(algorithm, key);
+		var decrypted = decipher.update(text.toString(),'hex','utf8'); //take it from hexa
+		decrypted += decipher.final('utf8'); //to standard text
+		//SAME GOES HERE
+		return decrypted
+	}
+	catch(err) {
+		return null;
+	}
 }
 
 http.createServer(function(request, response) { //on every request to the server
