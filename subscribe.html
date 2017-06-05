@@ -74,7 +74,10 @@
 				document.getElementById("warn").style.opacity = "1";
 			}
 
-			jQuery.post("/newUser", {username: name.toLowerCase(), pass: password}, function(result) {
+			jQuery.post("/newUser", {
+				username: name.toLowerCase(),
+				pass: password
+			}, function(result) {
 				switch(result) {
 					case "complete":
 						document.getElementById("warn").style.opacity = "0";

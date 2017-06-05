@@ -11,7 +11,11 @@
 		window.onload = function() {
 			var name = document.cookie.split(",")[0];
 			var password = document.cookie.split(",")[1];
-			jQuery.post("/login", {username: name, pass: password, encrypted: true}, function(result) {
+			jQuery.post("/login", {
+				username: name,
+				pass: password,
+				encrypted: true
+			}, function(result) {
 				if(result.indexOf("complete,") == 0) {
 					window.location = "/prefs.html";
 				}

@@ -11,7 +11,6 @@
 		window.onLoad = check();
 
 		function check() {
-
 			if(document.cookie.toString().length == 0 || document.cookie.toString() == "null") {
 				if(confirm("You aren't logged in, and you won't be able to access this page until you log in. Log in now?")) {
 					window.location = "/login.html";
@@ -23,7 +22,11 @@
 			else {
 				var name = document.cookie.split(",")[0];
 				var password = document.cookie.split(",")[1];
-				jQuery.post("/login", {username: name, pass: password, encrypted: true}, function(result) {
+				jQuery.post("/login", {
+					username: name,
+					pass: password,
+					encrypted: true
+				}, function(result) {
 					switch(result.split(",")[0]) {
 						case "complete":
 						break;
@@ -70,7 +73,11 @@
 			var devLogs = document.getElementById("devlogs").value;
 			var updateMails = document.getElementById("updateMails").value;
 
-			jQuery.post("/save", {username: name, pass: password, encrypted: true}, function(result) {
+			jQuery.post("/save", {
+				username: name,
+				pass: password,
+				encrypted: true
+			}, function(result) {
 				switch(result.split(",")[0]) {
 					case "complete":
 						document.cookie = name + "," + password + "; path=/prefs.html";
@@ -109,7 +116,12 @@
 			var password = document.getElementById("oldPW").value;
 			var newPass = document.getElementById("newPW1").value;
 
-			jQuery.post("/newPass", {username: name, pass: password, olga: newPass, encrypted: false}, function(result) {
+			jQuery.post("/newPass", {
+				username: name,
+				pass: password,
+				olga: newPass,
+				encrypted: false
+			}, function(result) {
 				switch(result.split(",")[0]) {
 					case "complete":
 						password = result.split(",")[1];

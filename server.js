@@ -213,7 +213,7 @@ function decrypt(text) { //decrypt text
 		var decrypted = decipher.update(text.toString(),'hex','utf8'); //take it from hexa
 		decrypted += decipher.final('utf8'); //to standard text
 		//SAME GOES HERE
-		return decrypted
+		return decrypted;
 	}
 	catch(err) {
 		return null;
