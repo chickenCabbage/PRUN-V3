@@ -80,8 +80,8 @@ function authLogin(request, response) { //on every login attempt
 		var password = body.split("=")[2].toString().split("&")[0];
 		var bool = body.split("=")[3];
 		if(bool == "true") {
-			//if it's from a prefs.html login it'll be encrypted
-			//if it's from a login.html login it'll be plaintext
+			//if it's from a cookie-based login it'll be encrypted
+			//if it's from a text-based login it'll be plaintext
 			password = decrypt(password);
 			bool = true;
 		}
@@ -135,11 +135,10 @@ function replacePW(request, response) {
 		body += chunk;
 	});
 	request.on("end", function() { //when you're done
-		errPrint(body)
 		var name = body.split("=")[1].split("&")[0].replace("%40", "@");
 		var oldp = body.split("=")[2].toString().split("&")[0];
 		var newp = body.split("=")[3].toString().split("&")[0];
-		var bool = (body.split("=")[4] == "true");
+		var bool = body.split("=")[4] == "true";
 
 		if(bool) {
 			oldp = decrypt(oldp);
@@ -192,11 +191,88 @@ function replacePW(request, response) {
 	});
 }
 
-savePrefs() {
-	
-}
+function savePrefs(request, response) {
+	body = ""; //THIS IS IMPORTANT SO PAST CREDENTIALS DON'T GET CARRIED OVER
+	request.on("data", function(chunk) { //read the request data into body
+		body += chunk;
+	});
+	request.on("end", function() { //when you're done reading the data
+		var name = body.split("=")[1].split("&")[0].replace("%40", "@");
+		var pass = body.split("=")[2].toString().split("&")[0];
+		var mail = body.split("=")[3].toString().split("&")[0] == "true";
+		var logs = body.split("=")[4].toString().split("&")[0] == "true";
+		var bool = body.split("=")[5] == "true";
 
-//// ADD SUPPORT FOR SAVING PREFS HERE
+		if(bool) {
+			pass = decrypt(pass);
+		}
+
+		try {
+			if(decrypt(fs.readFileSync("./users/" + name + ".usr")) == pass) {
+				if(mail) { //user wants to subscribe
+					var content = fs.readFileSync("./users/updates.dat");
+					if(content.indexOf(name) == -1) {
+						fs.appendFile("./users/updates.dat", "\n" + name);
+					}
+				}
+				else { //user wants to unsubscribe
+					var content = fs.readFileSync("./users/updates.dat").toString();
+					content = content.split("\r");
+					var newFile = "";
+					var l = content.length, a = 0;
+					fs.writeFileSync("./users/updates.dat", "");
+					while(l > a) {
+						if(content[a] != name) {
+							fs.appendFile("./users/updates.dat", content[a]);
+							console.log(content[a]);
+						}
+						else
+							console.log("wew lad");
+						a ++;
+					}
+				}
+
+				if(logs) {
+					var content = fs.readFileSync("./users/devlogs.dat");
+					if(content.indexOf(name) == -1) {
+						fs.appendFile("./users/devlogs.dat", "\n" + name);
+					}
+				}
+				else {
+					var content = fs.readFileSync("./users/devlogs.dat").toString();
+					content = content.split("\r");
+					var newFile = "";
+					var l = content.length, a = 0;
+					fs.writeFileSync("./users/devlogs.dat", "");
+					while(l > a) {
+						if(content[a] === name) {
+							fs.appendFile("./users/devlogs.dat", content[a]);
+							console.log(content[a]);
+						}
+						else
+							console.log("wew lad");
+						a ++;
+					}
+				}
+				response.writeHead(200, {"Content-Type": "text/plain"});
+				response.end("complete," + encrypt(pass)); //you're good
+			}
+			response.writeHead(200, {"Content-Type": "text/plain"});
+			response.end("password,"); //you're good
+		}
+		catch(err) {
+			if(err.code == "ENOENT") {
+				response.writeHead(200, {"Content-Type": "text/plain"});
+				response.end("username,");
+			}
+			else {
+				response.writeHead(500, {"Content-Type": "text/plain"});
+				response.end(err + ",");
+				errPrint("An error occured on prefs saving! " + err + "\nUser: " + name);
+			}
+		}
+	});
+}
 
 function encrypt(text) { //encrypt text
 	try {
@@ -304,7 +380,7 @@ http.createServer(function(request, response) { //on every request to the server
 				replacePW(request, response);
 			}
 			else if(request.url == "/save") {
-				savePrefs();
+				savePrefs(request, response);
 			}
 			else { //just a request for a normal file
 				var file = fs.readFileSync("." + request.url); //read the requested file
