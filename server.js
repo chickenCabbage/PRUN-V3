@@ -197,10 +197,10 @@ function savePrefs(request, response) {
 		body += chunk;
 	});
 	request.on("end", function() { //when you're done reading the data
-		var name = body.split("=")[1].split("&")[0].replace("%40", "@");
-		var pass = body.split("=")[2].toString().split("&")[0];
-		var mail = body.split("=")[3].toString().split("&")[0] == "true";
-		var logs = body.split("=")[4].toString().split("&")[0] == "true";
+		var name = body.split("=")[1].split("&")[0].replace("%40", "@"); //their username
+		var pass = body.split("=")[2].toString().split("&")[0]; //password
+		var mail = body.split("=")[3].toString().split("&")[0] == "true"; //do they want to be updated
+		var logs = body.split("=")[4].toString().split("&")[0] == "true"; //devlogs mailing list
 		var bool = body.split("=")[5] == "true";
 
 		if(bool) {
@@ -211,28 +211,24 @@ function savePrefs(request, response) {
 			if(decrypt(fs.readFileSync("./users/" + name + ".usr")) == pass) {
 				if(mail) { //user wants to subscribe
 					var content = fs.readFileSync("./users/updates.dat");
-					if(content.indexOf(name) == -1) {
-						fs.appendFile("./users/updates.dat", "\n" + name);
+					if(content.indexOf(name) == -1) { //if they're not already subscribed
+						fs.appendFile("./users/updates.dat", "\n" + name); //add them - this works
 					}
 				}
 				else { //user wants to unsubscribe
 					var content = fs.readFileSync("./users/updates.dat").toString();
-					content = content.split("\r");
-					var newFile = "";
-					var l = content.length, a = 0;
-					fs.writeFileSync("./users/updates.dat", "");
-					while(l > a) {
-						if(content[a] != name) {
-							fs.appendFile("./users/updates.dat", content[a]);
-							console.log(content[a]);
+					content = content.split("\n"); //split it to lines
+					var l = content.length, a = 0; //a is the index, l is the length
+					fs.writeFileSync("./users/updates.dat", ""); //clear it for writing
+					while(l > a) { //for every element in the array
+					if(content[a] != name) { //check if it's the name
+							fs.appendFile("./users/updates.dat", "\n" + content[a]); //rewrite
 						}
-						else
-							console.log("wew lad");
 						a ++;
 					}
 				}
 
-				if(logs) {
+				if(logs) { //user wants to get devlogs
 					var content = fs.readFileSync("./users/devlogs.dat");
 					if(content.indexOf(name) == -1) {
 						fs.appendFile("./users/devlogs.dat", "\n" + name);
@@ -240,17 +236,13 @@ function savePrefs(request, response) {
 				}
 				else {
 					var content = fs.readFileSync("./users/devlogs.dat").toString();
-					content = content.split("\r");
-					var newFile = "";
-					var l = content.length, a = 0;
-					fs.writeFileSync("./users/devlogs.dat", "");
-					while(l > a) {
-						if(content[a] === name) {
-							fs.appendFile("./users/devlogs.dat", content[a]);
-							console.log(content[a]);
+					content = content.split("\n"); //split it to lines
+					var l = content.length, a = 0; //a is the index, l is the length
+					fs.writeFileSync("./users/devlogs.dat", ""); //clear it for writing
+					while(l > a) { //for every element in the array
+						if(content[a] != name) { //check if it's the name
+							fs.appendFile("./users/devlogs.dat", "\n" + content[a]); //rewrite
 						}
-						else
-							console.log("wew lad");
 						a ++;
 					}
 				}
@@ -258,12 +250,19 @@ function savePrefs(request, response) {
 				response.end("complete," + encrypt(pass)); //you're good
 			}
 			response.writeHead(200, {"Content-Type": "text/plain"});
-			response.end("password,"); //you're good
+			response.end("password,"); //you're not good
 		}
 		catch(err) {
 			if(err.code == "ENOENT") {
-				response.writeHead(200, {"Content-Type": "text/plain"});
-				response.end("username,");
+				try {
+					fs.readFileSync("./users/" + name + ".unv");
+					response.writeHead(200, {"Content-Type": "text/plain"});
+					response.end("verify,");
+				}
+				catch(err2) {
+					response.writeHead(200, {"Content-Type": "text/plain"});
+					response.end("username,");
+				}
 			}
 			else {
 				response.writeHead(500, {"Content-Type": "text/plain"});
