@@ -82,8 +82,7 @@
 			}, function(result) {
 				switch(result.split(",")[0]) {
 					case "complete":
-						document.cookie = name + "," + password + "; path=/prefs.html";
-						document.getElementById("warn").style.opacity = "0";
+						window.location.reload();
 					break;
 					case "password":
 						if(confirm("Your password/username is incorrect, and you won't\n" +

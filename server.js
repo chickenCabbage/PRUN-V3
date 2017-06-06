@@ -49,7 +49,7 @@ function newUser(request, response) { //when a user is trying to subscribe
 						if(stderr != "") { //if there is errput
 							errPrint(stderr); //print it too
 						}
-					}); //end if
+					}); //end exec
 					response.writeHead(200, {"Content-Type": "text/plain"});
 					response.end("complete"); //if you made it this far all's cool, things executed well
 					wrnPrint("Added user: " + name);
