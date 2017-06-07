@@ -58,6 +58,31 @@
 				}
 			});
 		}
+
+		function recover() {
+			var mail = prompt("Please enter your email for recovery. You will me sent a message containing instructions.");
+			if(mail) {
+				return;
+			}
+			else {
+				jQuery.get("/recover", {
+					name: mail
+				}, function(result) {
+					switch(result) {
+						case "complete":
+							alert("Please check your email.");
+						break;
+						case "mail":
+							alert("Your email was invalid.");
+						break;
+
+						default:
+							alert("And error occured!\n" + result);
+						break;
+					}
+				});
+			}
+		}
 	</script>
 </head>
 <body>
@@ -94,6 +119,7 @@
 			<br>
 			<h2>Password</h2>
 			<input class="text" type="password" id="pw" name="pass">
+			<p><a href="javascript:recover();">I forgot my password!</a></p>
 			<br><br>
 			<input type="submit" id="submit" value="Log in!">
 			<br>

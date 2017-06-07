@@ -57,6 +57,17 @@
 					}
 				});
 			}
+
+			jQuery.get("/subbed", {
+				name: document.cookie.split(",")[0]
+			}, function(result) {
+				result = result.split(",");
+				var mails = (result[0] == "true");
+				var dlogs = (result[1] == "true");
+
+				document.getElementById("mailing").checked = mails;
+				document.getElementById("devlogs").checked = dlogs;
+			});
 		}
 
 		function logOut() {

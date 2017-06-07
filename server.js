@@ -360,6 +360,24 @@ http.createServer(function(request, response) { //on every request to the server
 					errPrint("Error in email verification: " + err);
 				}
 			}
+			else if(request.url.toString().indexOf("recover?name=") != -1) {
+
+			}
+			else if(request.url.toString().indexOf("subbed?name=") != -1) {
+				try {
+					var name = request.url.toString().split("=")[1].toString().replace("%40", "@");
+					var mails = (fs.readFileSync("./users/updates.dat").toString().indexOf(name) != -1);
+					var dlogs = (fs.readFileSync("./users/devlogs.dat").toString().indexOf(name) != -1);
+
+					response.writeHead(200, {"Content-Type": "text/html"});
+					response.end(mails + "," + dlogs);
+				}
+				catch(err) {
+					response.writeHead(500, {"Content-Type": "text/html"});
+					response.end(err);
+					errPrint("Error in mailing list check!\n" + err);
+				}
+			}
 			else {
 				file = fs.readFileSync("." + request.url); //read the requested file
 			}
