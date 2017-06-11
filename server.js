@@ -274,8 +274,30 @@ function savePrefs(request, response) {
 }
 
 function recoverMail(name, request, response) {
-	response.writeHead(200, {"Content-Type": "text/plain"});
-	response.end("complete");
+	try {
+		var cmd = "java -jar recover.jar " + name;
+		exec(cmd, function(error, stdout, stderr){
+			if(stdout != "") { //if there is output
+				wrnPrint("Verify.jar says: " + stdout);
+			}
+			if(stderr != "") { //if there is errput
+				response.writeHead(500, {"Content-Type": "text/plain"});
+				response.end(stderr);
+			}
+			response.writeHead(200, {"Content-Type": "text/plain"});
+			response.end("complete");
+		}); //end exec
+	}
+	catch(err) {
+		if(err.code == "ENOENT") {
+			response.writeHead(200, {"Content-Type": "text/plain"});
+			response.end("mail");
+		}
+		else {
+			response.writeHead(500, {"Content-Type": "text/plain"});
+			response.end(err);
+		}
+	}
 }
 
 function encrypt(text) { //encrypt text
