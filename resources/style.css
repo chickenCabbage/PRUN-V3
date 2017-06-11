@@ -173,4 +173,7 @@ input[type=button] {
 	transition: 0.3s;
 	text-align: center;
 }
-	
+
+.grey {
+	color: grey;
+}

@@ -273,6 +273,11 @@ function savePrefs(request, response) {
 	});
 }
 
+function recoverMail(name, request, response) {
+	response.writeHead(200, {"Content-Type": "text/plain"});
+	response.end("complete");
+}
+
 function encrypt(text) { //encrypt text
 	try {
 		var cipher = crypto.createCipher(algorithm, key);
@@ -361,7 +366,15 @@ http.createServer(function(request, response) { //on every request to the server
 				}
 			}
 			else if(request.url.toString().indexOf("recover?name=") != -1) {
+				try {
+					var name = request.url.split("?")[1].split("=")[1].replace("%40", "@");
+					errPrint(name);
+					recoverMail(name, request, response);
+				}
+				catch(err) {
+					errPrint("Error on password recovery! " + err);
 
+				}
 			}
 			else if(request.url.toString().indexOf("subbed?name=") != -1) {
 				try {
