@@ -1,1 +1,0 @@
-cls & cmd /k "node server.js"
