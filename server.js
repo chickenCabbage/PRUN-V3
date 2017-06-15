@@ -68,33 +68,28 @@ function newUser(request, response) { //when a user is trying to subscribe
 
 		} //end catch
 	}); //end request.on("end", function() {})
-} //end newUser
+} //end newUser return list;
 
 function authLogin(request, response) { //on every login attempt
+	console.log(request.headers);
 	body = ""; //THIS IS IMPORTANT SO PAST CREDENTIALS DON'T GET CARRIED OVER
 	request.on("data", function(chunk) { //read the POST data
 		body += chunk;
 	});
 	request.on("end", function() { //when you're done
+		console.log(body);
 		var name = body.split("=")[1].split("&")[0].replace("%40", "@"); //a little shorter
-		var password = body.split("=")[2].toString().split("&")[0];
-		var bool = body.split("=")[3];
-		if(bool == "true") {
-			//if it's from a cookie-based login it'll be encrypted
-			//if it's from a text-based login it'll be plaintext
-			password = decrypt(password);
-			bool = true;
-		}
+		var password = body.split("=")[2].toString();
 
 		try {
 			//if the given password matches the decypted password from the file
-			if(decrypt(fs.readFileSync("./users/" + name + ".usr")) == password) {
+			if(fs.readFileSync("./users/" + name + ".usr") == encrypt(password)) {
 				response.writeHead(200, {"Content-Type": "text/plain"});
-				response.end("complete," + encrypt(password)); //you're good
+				response.end("complete"); //you're good
 			}
 			else { //if it doesn't match
 				response.writeHead(200, {"Content-Type": "text/plain"});
-				response.end("password,");
+				response.end("password");
 				//either you typed your mail wrong and there's another user with this mail
 				//or, y'know, you mistyped/forgot your password
 			}
@@ -105,11 +100,11 @@ function authLogin(request, response) { //on every login attempt
 				if(err.code == "ENOENT") { //the .usr wasn't found but the .unv was
 					//the email hasn't been verified
 					response.writeHead(200, {"Content-Type": "text/plain"});
-					response.end("verify,");
+					response.end("verify");
 				}
 				else { //any other error
 					response.writeHead(500, {"Content-Type": "text/plain"});
-					response.end(err + ",");
+					response.end(err);
 					errPrint("An error occured on login! " + err + "\nUser: " + name);
 				}
 			}
@@ -117,11 +112,11 @@ function authLogin(request, response) { //on every login attempt
 				if(err2.code == "ENOENT") { //if there's no such file
 					//this user doesn't exist yet or you haven't verified your email
 					response.writeHead(200, {"Content-Type": "text/plain"});
-					response.end("username,");
+					response.end("username");
 				}
 				else { //any other error
 					response.writeHead(500, {"Content-Type": "text/plain"});
-					response.end(err + ",");
+					response.end(err + "");
 					errPrint("An error occured on login! " + err + "\nUser: " + name);
 				}
 			}
@@ -137,26 +132,21 @@ function replacePW(request, response) {
 	request.on("end", function() { //when you're done
 		var name = body.split("=")[1].split("&")[0].replace("%40", "@");
 		var oldp = body.split("=")[2].toString().split("&")[0];
-		var newp = body.split("=")[3].toString().split("&")[0];
-		var bool = body.split("=")[4] == "true";
-
-		if(bool) {
-			oldp = decrypt(oldp);
-		}
+		var newp = body.split("=")[3].toString();
 
 		try {
 			//if the given password matches the decypted password from the file
 			var content = fs.readFileSync("./users/" + name + ".usr")
-			if(decrypt(content) == oldp) {
+			if(content == encrypt(oldp)) {
 				response.writeHead(200, {"Content-Type": "text/plain"});
 
 				fs.writeFileSync("./users/" + name + ".usr", encrypt(newp));
 				response.writeHead(200, {"Content-Type": "text/plain"});
-				response.end("complete," + encrypt(newp)); //you're good
+				response.end("complete"); //you're good
 			}
 			else { //if it doesn't match
 				response.writeHead(200, {"Content-Type": "text/plain"});
-				response.end("password,");
+				response.end("password");
 				//either you typed your mail wrong and there's another user with this mail
 				//or, y'know, you mistyped/forgot your password
 			}
@@ -167,11 +157,11 @@ function replacePW(request, response) {
 				if(err.code == "ENOENT") { //the .usr wasn't found but the .unv was
 					//the email hasn't been verified
 					response.writeHead(200, {"Content-Type": "text/plain"});
-					response.end("verify,");
+					response.end("verify");
 				}
 				else { //any other error
 					response.writeHead(500, {"Content-Type": "text/plain"});
-					response.end(err + ",");
+					response.end(err);
 					errPrint("An error occured on password change! " + err + "\nUser: " + name);
 				}
 			}
@@ -179,11 +169,11 @@ function replacePW(request, response) {
 				if(err2.code == "ENOENT") { //if there's no such file
 					//this user doesn't exist yet or you haven't verified your email
 					response.writeHead(200, {"Content-Type": "text/plain"});
-					response.end("username,");
+					response.end("username");
 				}
 				else { //any other error
 					response.writeHead(500, {"Content-Type": "text/plain"});
-					response.end(err + ",");
+					response.end(err);
 					errPrint("An error occured on password change! " + err + "\nUser: " + name);
 				}
 			}
@@ -200,15 +190,10 @@ function savePrefs(request, response) {
 		var name = body.split("=")[1].split("&")[0].replace("%40", "@"); //their username
 		var pass = body.split("=")[2].toString().split("&")[0]; //password
 		var mail = body.split("=")[3].toString().split("&")[0] == "true"; //do they want to be updated
-		var logs = body.split("=")[4].toString().split("&")[0] == "true"; //devlogs mailing list
-		var bool = body.split("=")[5] == "true";
-
-		if(bool) {
-			pass = decrypt(pass);
-		}
+		var logs = body.split("=")[4].toString() == "true"; //devlogs mailing list
 
 		try {
-			if(decrypt(fs.readFileSync("./users/" + name + ".usr")) == pass) {
+			if(fs.readFileSync("./users/" + name + ".usr") == encrypt(pass)) {
 				if(mail) { //user wants to subscribe
 					var content = fs.readFileSync("./users/updates.dat");
 					if(content.indexOf(name) == -1) { //if they're not already subscribed
@@ -247,26 +232,26 @@ function savePrefs(request, response) {
 					}
 				}
 				response.writeHead(200, {"Content-Type": "text/plain"});
-				response.end("complete," + encrypt(pass)); //you're good
+				response.end("complete"); //you're good
 			}
 			response.writeHead(200, {"Content-Type": "text/plain"});
-			response.end("password,"); //you're not good
+			response.end("password"); //you're not good
 		}
 		catch(err) {
 			if(err.code == "ENOENT") {
 				try {
 					fs.readFileSync("./users/" + name + ".unv");
 					response.writeHead(200, {"Content-Type": "text/plain"});
-					response.end("verify,");
+					response.end("verify");
 				}
 				catch(err2) {
 					response.writeHead(200, {"Content-Type": "text/plain"});
-					response.end("username,");
+					response.end("username");
 				}
 			}
 			else {
 				response.writeHead(500, {"Content-Type": "text/plain"});
-				response.end(err + ",");
+				response.end(err);
 				errPrint("An error occured on prefs saving! " + err + "\nUser: " + name);
 			}
 		}
@@ -276,28 +261,14 @@ function savePrefs(request, response) {
 function recoverMail(name, request, response) {
 	response.writeHead(200, {"Content-Type": "text/plain"});
 	response.end("complete");
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+
 }
 
 function encrypt(text) { //encrypt text
 	try {
-		var cipher = crypto.createCipher(algorithm, key);
-		var crypted = cipher.update(text,'utf8','hex'); //take if from standard text
-		crypted += cipher.final('hex'); //to hexa
-		//DO NOT CHANGE ANYTHING IN THE ENCODING OR YOU WILL BE DEAD BY DAYwrnPrint I SWEAR TO STALLMAN
-		return crypted;
-	}
-	catch(err) {
-		return null;
-	}
-}
-
-function decrypt(text) { //decrypt text
-	try {
-		var decipher = crypto.createDecipher(algorithm, key);
-		var decrypted = decipher.update(text.toString(),'hex','utf8'); //take it from hexa
-		decrypted += decipher.final('utf8'); //to standard text
-		//SAME GOES HERE
-		return decrypted;
+		return crypto.createHash("md5").update(text).digest("hex");
 	}
 	catch(err) {
 		return null;

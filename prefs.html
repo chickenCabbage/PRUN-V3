@@ -24,9 +24,9 @@
 				var password = document.cookie.split(",")[1];
 				jQuery.post("/login", {
 					username: name,
-					pass: password,
-					encrypted: true
+					pass: password
 				}, function(result) {
+					alert(result);
 					switch(result.split(",")[0]) {
 						case "complete":
 						break;
@@ -88,9 +88,9 @@
 				username: name,
 				pass: password,
 				mails: updatemails,
-				logs: devlogs,
-				encrypted: true
+				logs: devlogs
 			}, function(result) {
+				alert(result);
 				switch(result.split(",")[0]) {
 					case "complete":
 						window.location.reload();
@@ -131,9 +131,9 @@
 			jQuery.post("/newPass", {
 				username: name,
 				pass: password,
-				olga: newPass,
-				encrypted: false
+				olga: newPass
 			}, function(result) {
+				alert(result);
 				switch(result.split(",")[0]) {
 					case "complete":
 						password = result.split(",")[1];
@@ -219,7 +219,11 @@
 			var name = document.cookie.split(",")[0];
 			var oldPass = document.getElementById("oldPW").value;
 			var newPass = document.getElementById("newPW1").value;
-			jQuery.post("/newPass", {username: name, pass: oldPass, new: newPass, encrypted: true}, function(result) {
+			jQuery.post("/newPass", {
+				username: name,
+				pass: oldPass,
+				new: newPass
+			}, function(result) {
 			console.log(result);
 			});
 		}
