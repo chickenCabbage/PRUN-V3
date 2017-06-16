@@ -1,13 +1,11 @@
+var removeEmptyLines = require("remove-blank-lines"); //lazy af
 var exec = require("child_process").exec;
 var crypto = require("crypto"); //nodejs cryptography
 var colors = require("colors"); //awsome console
-var algorithm = "aes-256-ctr"; //encryption algorithm
 var http = require("http"); //basic HTTP shit
 var fs = require("fs"); //for file I/O
 var port = 8888;
 var body = ""; //for POST data
-
-var key = "wu7 7)(3 f*ck N0de.jS"; //the AES encryption key
 
 function errPrint(text) {
 	console.log("\n" + colors.red("ERROR: ") + text + "\n");
@@ -40,14 +38,14 @@ function newUser(request, response) { //when a user is trying to subscribe
 			}
 			catch (err) { //if it doesn't exist it'll throw ENOENT and go here
 				if(err.code == "ENOENT"){
-					var cmd = "java -jar verify.jar " + name + " " + encrypt(body.split("=")[2]);
+					var cmd = "java -jar verify.jar " + name + " " + hash(body.split("=")[2]);
 					//run verify.jar with the name and encrypted PW of the new user
 					exec(cmd, function(error, stdout, stderr){
 						if(stdout != "") { //if there is output
 							wrnPrint("Verify.jar says: " + stdout);
 						}
 						if(stderr != "") { //if there is errput
-							errPrint(stderr); //print it too
+							errPrint("Verify.jar: " + stderr); //print it too
 						}
 					}); //end exec
 					response.writeHead(200, {"Content-Type": "text/plain"});
@@ -77,10 +75,13 @@ function authLogin(request, response) { //on every login attempt
 	});
 	request.on("end", function() { //when you're done
 		try {
-			var name = body.split("=")[1].split("&")[0].replace("%40", "@"); //a little shorter
+			var name = body.split("=")[1].split("&")[0].replace("%40", "@").toString(); //a little shorter
 			var password = body.split("=")[2].toString();
+
+			console.log(hash(password));
+			console.log(fs.readFileSync("./users/" + name + ".usr").toString());
 			//if the given password matches the decypted password from the file
-			if(fs.readFileSync("./users/" + name + ".usr") == encrypt(password)) {
+			if(fs.readFileSync("./users/" + name + ".usr").toString() == hash(password)) {
 				response.writeHead(200, {"Content-Type": "text/plain"});
 				response.end("complete"); //you're good
 			}
@@ -92,7 +93,6 @@ function authLogin(request, response) { //on every login attempt
 			}
 		} //end try
 		catch(err) {
-			console.log(body);
 			try {
 				fs.readFileSync("./users/" + name + ".unv");
 				if(err.code == "ENOENT") { //the .usr wasn't found but the .unv was
@@ -135,10 +135,10 @@ function replacePW(request, response) {
 		try {
 			//if the given password matches the decypted password from the file
 			var content = fs.readFileSync("./users/" + name + ".usr")
-			if(content == encrypt(oldp)) {
+			if(content == hash(oldp)) {
 				response.writeHead(200, {"Content-Type": "text/plain"});
 
-				fs.writeFileSync("./users/" + name + ".usr", encrypt(newp));
+				fs.writeFileSync("./users/" + name + ".usr", hash(newp));
 				response.writeHead(200, {"Content-Type": "text/plain"});
 				response.end("complete"); //you're good
 			}
@@ -191,7 +191,7 @@ function savePrefs(request, response) {
 		var logs = body.split("=")[4].toString() == "true"; //devlogs mailing list
 
 		try {
-			if(fs.readFileSync("./users/" + name + ".usr") == encrypt(pass)) {
+			if(fs.readFileSync("./users/" + name + ".usr") == hash(pass)) {
 				if(mail) { //user wants to subscribe
 					var content = fs.readFileSync("./users/updates.dat");
 					if(content.indexOf(name) == -1) { //if they're not already subscribed
@@ -203,12 +203,15 @@ function savePrefs(request, response) {
 					content = content.split("\n"); //split it to lines
 					var l = content.length, a = 0; //a is the index, l is the length
 					fs.writeFileSync("./users/updates.dat", ""); //clear it for writing
+					var data = "";
 					while(l > a) { //for every element in the array
-					if(content[a] != name) { //check if it's the name
-							fs.appendFile("./users/updates.dat", "\n" + content[a]); //rewrite
+						if(content[a] != name) { //check if it's the name
+							data += (content[a] + "\n");
 						}
 						a ++;
 					}
+					data = removeEmptyLines(data);
+					fs.writeFile("./users/updates.dat", data);
 				}
 
 				if(logs) { //user wants to get devlogs
@@ -222,13 +225,17 @@ function savePrefs(request, response) {
 					content = content.split("\n"); //split it to lines
 					var l = content.length, a = 0; //a is the index, l is the length
 					fs.writeFileSync("./users/devlogs.dat", ""); //clear it for writing
+					var data = "";
 					while(l > a) { //for every element in the array
 						if(content[a] != name) { //check if it's the name
-							fs.appendFile("./users/devlogs.dat", "\n" + content[a]); //rewrite
+							data += (content[a] + "\n");
 						}
 						a ++;
 					}
+					data = removeEmptyLines(data);
+					fs.writeFile("./users/devlogs.dat", data);
 				}
+
 				response.writeHead(200, {"Content-Type": "text/plain"});
 				response.end("complete"); //you're good
 			}
@@ -259,12 +266,10 @@ function savePrefs(request, response) {
 function recoverMail(name, request, response) {
 	response.writeHead(200, {"Content-Type": "text/plain"});
 	response.end("complete");
-
 	//////////////////////////////////////////////////////////////////////////////////////////////////
-
 }
 
-function encrypt(text) { //encrypt text
+function hash(text) { //encrypt text
 	try {
 		return crypto.createHash("md5").update(text).digest("hex");
 	}

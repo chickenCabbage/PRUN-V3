@@ -15,7 +15,7 @@ function wrnPrint(text) {
 }
 
 function now() {
-	Date now = new Date();
+	var date = new Date();
 	return time = date.getHours() + ":" + date.getMinutes() + " "
 	+ date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
 }
@@ -29,23 +29,20 @@ client.on("fetch", function(){ //when client.fetch() is called
 			fs.writeFile("./update.txt", time + "," + client.title + "," + client.images[0]); //change update.txt
 
 			wrnPrint("UPDATED! on " + time + ": " + client.title); //woo
-			var dat
-			console.log("Recoginzed on " + time + "\n");
+			console.log("Recoginzed on " + now() + "\n");
 
 			title = client.title;
 
 			var names = fs.readFileSync("./users/updates.dat").toString();
-			console.log(names);
 			names = names.replace("\n", " ");
-			console.log(names);
 
 			var cmd = "java -jar mailer.jar " + names;
 			exec(cmd, function(error, stdout, stderr){
 				if(stdout != "") { //if there is output
-					wrnPrint("Verify.jar says: " + stdout);
+					wrnPrint("mailer.jar says: " + stdout);
 				}
 				if(stderr != "") { //if there is errput
-					errPrint(stderr); //print it too
+					errPrint("Mailer.jar: " + stderr); //print it too
 				}
 			}); //end exec
 		}//end if
@@ -60,6 +57,7 @@ client.on("error", function(err) { //if an error occures
 });
 
 console.log("Starting now.");
+now();
 client.fetch(); //initialization
 
 setInterval(function() { //do this every 30 seconds (30,000 milis)

@@ -21,12 +21,11 @@
 			}
 			else {
 				var name = document.cookie.split(",")[0];
-				var password = document.cookie.split(",")[1];
+				var password = document.cookie.split(",")[1].split(";")[0];
 				jQuery.post("/login", {
 					username: name,
 					pass: password
 				}, function(result) {
-					alert(result);
 					switch(result.split(",")[0]) {
 						case "complete":
 						break;
@@ -80,7 +79,7 @@
 
 		function postPrefs() {
 			var name = document.cookie.split(",")[0];
-			var password = document.cookie.split(",")[1];
+			var password = document.cookie.split(",")[1].split(";")[0];
 			var updatemails = document.getElementById("mailing").checked;
 			var devlogs = document.getElementById("devlogs").checked;
 
@@ -90,14 +89,13 @@
 				mails: updatemails,
 				logs: devlogs
 			}, function(result) {
-				alert(result);
 				switch(result.split(",")[0]) {
 					case "complete":
 						window.location.reload();
 					break;
 					case "password":
 						if(confirm("Your password/username is incorrect, and you won't\n" +
-							"be able to access this page until you log in\n. Log in now?")) {
+							"be able to access this page until you log in.\nLog in now?")) {
 							window.location = "/login.html";
 						}
 						else {
@@ -106,7 +104,7 @@
 					break;
 					case "username":
 						if(confirm("Your username credential doesn't exist, and you won't\n" +
-							"be able to access this page until you log in\n. Log in now?")) {
+							"be able to access this page until you log in.\nLog in now?")) {
 							window.location = "/login.html";
 						}
 						else {
@@ -133,12 +131,8 @@
 				pass: password,
 				olga: newPass
 			}, function(result) {
-				alert(result);
 				switch(result.split(",")[0]) {
 					case "complete":
-						password = result.split(",")[1];
-						document.cookie = name + "," + password + "; path=/prefs.html";
-						window.location.reload();
 					break;
 					case "verify":
 						if(confirm("Your username isn't verified, and you won't\n" +
