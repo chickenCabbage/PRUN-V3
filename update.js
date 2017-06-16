@@ -7,10 +7,17 @@ var fs = require("fs");
 var title = fs.readFileSync("./update.txt").toString().split(",")[1]; //stores the page's title
 
 function errPrint(text) {
-	console.log("\n" + colors.red("ERROR: ") + text + "\n");
+	console.log("\n" + colors.red("ERROR: ") + text);
+	console.log("Error occured on " + now + "\n");
 }
 function wrnPrint(text) {
 	console.log(colors.yellow("WARNING: ") + text);
+}
+
+function now() {
+	Date now = new Date();
+	return time = date.getHours() + ":" + date.getMinutes() + " "
+	+ date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
 }
 
 client.on("fetch", function(){ //when client.fetch() is called
@@ -22,9 +29,7 @@ client.on("fetch", function(){ //when client.fetch() is called
 			fs.writeFile("./update.txt", time + "," + client.title + "," + client.images[0]); //change update.txt
 
 			wrnPrint("UPDATED! on " + time + ": " + client.title); //woo
-			var date = new Date();
-			time = date.getUTCHours() + ":" + date.getUTCMinutes() + " " +
-			date.getUTCDate() + "/" + (date.getUTCMonth() + 1) + "/" + date.getUTCFullYear() //date, in UTC
+			var dat
 			console.log("Recoginzed on " + time + "\n");
 
 			title = client.title;

@@ -1,5 +1,5 @@
 function openNav() { //open the sidenav
-	document.getElementById("sidepanel").style.width = "26%";
+	document.getElementById("sidepanel").style.width = "100%";
 	document.getElementById("navicon").style.opacity = "0";
 }
 function closeNav() { //close the sidenav

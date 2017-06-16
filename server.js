@@ -71,17 +71,14 @@ function newUser(request, response) { //when a user is trying to subscribe
 } //end newUser return list;
 
 function authLogin(request, response) { //on every login attempt
-	console.log(request.headers);
 	body = ""; //THIS IS IMPORTANT SO PAST CREDENTIALS DON'T GET CARRIED OVER
 	request.on("data", function(chunk) { //read the POST data
 		body += chunk;
 	});
 	request.on("end", function() { //when you're done
-		console.log(body);
-		var name = body.split("=")[1].split("&")[0].replace("%40", "@"); //a little shorter
-		var password = body.split("=")[2].toString();
-
 		try {
+			var name = body.split("=")[1].split("&")[0].replace("%40", "@"); //a little shorter
+			var password = body.split("=")[2].toString();
 			//if the given password matches the decypted password from the file
 			if(fs.readFileSync("./users/" + name + ".usr") == encrypt(password)) {
 				response.writeHead(200, {"Content-Type": "text/plain"});
@@ -95,6 +92,7 @@ function authLogin(request, response) { //on every login attempt
 			}
 		} //end try
 		catch(err) {
+			console.log(body);
 			try {
 				fs.readFileSync("./users/" + name + ".unv");
 				if(err.code == "ENOENT") { //the .usr wasn't found but the .unv was
