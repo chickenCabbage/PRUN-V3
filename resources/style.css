@@ -14,7 +14,7 @@ body {
 	text-align: right;
 }
 #navicon {
-	width: 6%;
+	height: 10%;
 	top: 1%;
 	right: 1%;
 	z-index: 2;
@@ -32,30 +32,37 @@ body {
 }
 
 #twitter { /* #twitter ayy lmao */
-	top: 4%;
+	top: 3%;
 	left: 40%;
-	width: 3%;
+	height: 6%;
 	z-index: 2;
 	position: fixed;
 }
 #rss {
-	top: 3.5%;
+	top: 3%;
 	left: 35%;
-	width: 3%;
+	height: 6%;
 	z-index: 2;
 	position: fixed;
 }
 #tumblr {
-	top: 3.5%;
+	top: 3%;
 	left: 45%;
-	width: 3%;
+	height: 6%;
+	z-index: 2;
+	position: fixed;
+}
+#email {
+	top: 3%;
+	left: 50%;
+	height: 6%;
 	z-index: 2;
 	position: fixed;
 }
 #patreon {
-	top: 4.5%;
-	left: 50%;
-	height: 3%;
+	top: 4%;
+	left: 55%;
+	height: 4%;
 	z-index: 2;
 	position: fixed;
 }

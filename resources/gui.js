@@ -1,3 +1,5 @@
+var guiFlag = true;
+
 function openNav() { //open the sidenav
 	document.getElementById("sidepanel").style.width = "100%";
 	document.getElementById("navicon").style.opacity = "0";

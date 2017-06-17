@@ -336,7 +336,24 @@ http.createServer(function(request, response) { //on every request to the server
 					}
 				}
 				catch(err) {
-					errPrint("Error in email verification: " + err);
+					if(err.code == "ENOENT"){
+						try {
+							fs.readFile("./users/" + name + ".usr");
+							file = fs.readFileSync("./login.html");
+							response.writeHead(200, {"Content-Type": "text/html"});
+							response.end(file);
+						}
+						catch(err2) {
+							file = fs.readFileSync("./login.html");
+							response.writeHead(404, {"Content-Type": "text/html"});
+							response.end(file);
+						}
+					}
+					else {
+						response.writeHead(500, {"Content-Type": "text/html"});
+						response.end(err);
+						errPrint("Error in mailing list check!\n" + err);
+					}
 				}
 			}
 			else if(request.url.toString().indexOf("recover?name=") != -1) {

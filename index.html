@@ -1,78 +1,18 @@
 <!DOCTYPE html>
 <html>
-<meta charset="UTF-8">
 <head>
 	<title>Prague Race Updates</title>
 	<link rel="stylesheet" type="text/css" href="/resources/style.css">
 	<script src="/resources/jQuery.js">//jQuery</script>
 	<script src="/resources/gui.js"></script>
+	<script src="/resources/index.js"></script>
 	<script>
-		var updateText;
-		var lastCheckTime = 0;
-
-		//// NOTIFICATIONS ////////////////////////////////////////////////////////////////////////
-
-		document.addEventListener('DOMContentLoaded', function() { //ask for permissions
-			if (Notification.permission !== "granted")
-			 Notification.requestPermission(); //please OwO
-		});
-
-		function notify(image) {
-			if (!Notification) {
-				alert("Prague Race updated!\nDesktop notifications aren't available in your browser.");
-				return;
-			}
-
-			if (Notification.permission !== "granted"){ //if you didn't get permission
-				Notification.requestPermission();
-			}
-			else { //if you did though
-				console.log("UPDATE!");
-				var notification = new Notification("Prague Race updated!", {
-					icon: image,
-					body: "We just noticed an update to Prague Race, you should go check it out!",
-				});
-				notification.onclick = function() {
-					window.open("http://www.praguerace.com/");
-					notification.close();      
-				};
+		window.onload = function() {
+			if(!guiFlag || !indexFlag || !jqFlag) {
+				alert("Scripts in this page have not loaded properly and it will not be functionable if they aren't loaded. This page will refresh itself once you close this message.");
+				window.location.reload();
 			}
 		}
-
-		//// ACTUAL "MECHANISM" ///////////////////////////////////////////////////////////////////
-
-		window.onLoad = jQuery.get("/update.txt", function(data, status) { //init
-			updateText = data;
-			document.getElementById("lad").innerHTML = updateText.split(",")[0];
-			document.getElementById("lat").innerHTML = updateText.split(",")[1];
-			document.getElementById("spoiler").src = updateText.split(",")[2];
-		});
-
-		function check() {
-			document.getElementById("status").innerHTML = "Checking for update...";
-			jQuery.get("/update.txt", function(data, status) {
-				if(data == updateText) {}
-				else { //yes update
-					document.getElementById("status").innerHTML = "Update!";
-					document.getElementById("lad").innerHTML = updateText.split(",")[0];
-					document.getElementById("lat").innerHTML = updateText.split(",")[1];
-					document.getElementById("spoiler").src = updateText.split(",")[2];
-					notify(updateText.split(",")[2]);
-				}
-				updateText = data;
-			});
-		}
-
-		//// TIMER ////////////////////////////////////////////////////////////////////////////////
-
-		window.onLoad = setInterval(function() {
-			document.getElementById("status").innerHTML = "Checked " + lastCheckTime + " seconds ago."
-			if (lastCheckTime == 30){ //reset the check loop
-				check(); //refresh
-				lastCheckTime = 0;
-			}
-			lastCheckTime ++;
-		}, 1000);
 	</script>
 </head>
 <body>
@@ -80,10 +20,11 @@
 		<img src="./images/navicon.png" id="navicon" onclick="openNav()""><!--The menu symbol-->
 	</div>
 
-	<a href="javascript:window.open('http://leppu.tumblr.com/');"><img id="tumblr" src="./images/tumblr.png"></a> <!--Leppu's Tumblr-->
-	<a href="javascript:window.open('https://twitter.com/petra_nordlund');"><img id="twitter" src="./images/twitter.png"></a> <!--Leppu's Twitter-->
-	<a href="javascript:window.open('http://www.praguerace.com/rss.php');"><img id="rss" src="./images/rss.png"></a> <!--Hiveworks's RSS--> <!--TBH I have no idea about how RSS works or how to use it-->
-	<a href="javascript:window.open('https://www.patreon.com/praguerace');"><img id="patreon" src="./images/patreon.png"></a> <!--Leppu's Patreon--> <!--Please go donate!-->
+	<a href="javascript:window.open('http://leppu.tumblr.com/');"><img id="tumblr" src="/images/tumblr.png"></a> <!--Leppu's Tumblr-->
+	<a href="javascript:window.open('https://twitter.com/petra_nordlund');"><img id="twitter" src="/images/twitter.png"></a> <!--Leppu's Twitter-->
+	<a href="javascript:window.open('http://www.praguerace.com/rss.php');"><img id="rss" src="/images/rss.png"></a> <!--Hiveworks's RSS--> <!--TBH I have no idea about how RSS works or how to use it-->
+	<a href="/subscribe.html"><img id="email" src="/images/email.png"></a> <!--email notifications-->
+	<a href="javascript:window.open('https://www.patreon.com/praguerace');"><img id="patreon" src="/images/patreon.png"></a> <!--Leppu's Patreon--> <!--Please go donate!-->
 
 	<div id="vertiBar"></div> <!--The side bar thing-->
 

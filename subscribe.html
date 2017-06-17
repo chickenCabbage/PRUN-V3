@@ -5,95 +5,13 @@
 	<link rel="stylesheet" type="text/css" href="/resources/style.css">
 	<script src="/resources/jQuery.js">//jQuery</script>
 	<script src="/resources/gui.js"></script>
+	<script src="/resources/subscribe.js"></script>
 	<script>
-		//// VALIDATE THE PASSWORD ////////////////////////////////////////////////////////////////
-
-		function checkPW() {
-			var name = document.getElementById("name").value;
-			var pw1 = document.getElementById("pw1").value;
-			var pw2 = document.getElementById("pw2").value;
-
-			if (pw1 == pw2) {
-				if(pw1.indexOf(",") != -1
-					|| pw1.indexOf(":") != -1
-					|| pw1.indexOf(" ") != -1
-					|| pw1.indexOf("'") != -1
-					|| pw1.indexOf("*") != -1
-					|| pw1.indexOf("&") != -1
-					|| pw1.indexOf("=") != -1
-					|| pw1.indexOf("\\") != -1
-					|| pw1.indexOf("\"") != -1) { //check for sh*t
-					document.getElementById("warn").innerHTML = "Invalid password.";
-					document.getElementById("warn").style.opacity = "1";
-					document.getElementById("submit").disabled = true;
-				}
-				else {
-					if (pw1.length > 6) {
-						if((name.indexOf("@") != -1 || name.indexOf(".") != -1) && name.length > 4) {
-							document.getElementById("warn").style.opacity = "0";
-							document.getElementById("submit").disabled = false;
-						}
-						else {
-							document.getElementById("warn").innerHTML = "Invalid email.";
-							document.getElementById("warn").style.opacity = "1";
-							document.getElementById("submit").disabled = true;
-						}
-					}
-					else {
-						document.getElementById("warn").innerHTML = "Please use a password with more characters. (> 6)";
-						document.getElementById("warn").style.opacity = "1";
-						document.getElementById("submit").disabled = true;
-					}
-				}
+		window.onload = function() {
+			if(!guiFlag || !subscribeFlag || !jqFlag) {
+				alert("Scripts in this page have not loaded properly and it will not be functionable if they aren't loaded. This page will refresh itself once you close this message.");
+				window.location.reload();
 			}
-			else {
-				document.getElementById("warn").innerHTML = "Passwords don't match!";
-				document.getElementById("warn").style.opacity = "1";
-				document.getElementById("submit").disabled = true;
-			}
-		};
-
-		//// POST DATA TO THE SERVER //////////////////////////////////////////////////////////////
-
-		function post() {
-			var name = document.getElementById("name").value;
-			var password = document.getElementById("pw1").value;
-			var pw1 = password;
-			var pw2 = document.getElementById("pw2").value;
-
-			if(pw1.indexOf(",") != -1
-				|| pw1.indexOf(":") != -1
-				|| pw1.indexOf(" ") != -1
-				|| pw1.indexOf("'") != -1
-				|| pw1.indexOf("*") != -1
-				|| pw1.indexOf("&") != -1
-				|| pw1.indexOf("=") != -1
-				|| pw1.indexOf("\\") != -1
-				|| pw1.indexOf("\"") != -1) { //not gonna inject me, boi
-				document.getElementById("warn").innerHTML = "Invalid username.";
-				document.getElementById("warn").style.opacity = "1";
-			}
-
-			jQuery.post("/newUser", {
-				username: name.toLowerCase(),
-				pass: password
-			}, function(result) {
-				switch(result) {
-					case "complete":
-						document.getElementById("warn").style.opacity = "0";
-						window.location = "/login.html";
-					break;
-					case "exists": //this user already exists
-						document.getElementById("warn").innerHTML = "This email is already registered.";
-						document.getElementById("warn").style.opacity = "1";
-					break;
-
-					default: //error
-						document.getElementById("warn").innerHTML = "A server error occured:\n" + result;
-						document.getElementById("warn").style.opacity = "1";
-					break;
-				}
-			});
 		}
 	</script>
 </head>
@@ -104,6 +22,7 @@
 	<a href="javascript:window.open('http://leppu.tumblr.com/');"><img id="tumblr" src="./images/tumblr.png"></a> <!--Leppu's Tumblr-->
 	<a href="javascript:window.open('https://twitter.com/petra_nordlund');"><img id="twitter" src="./images/twitter.png"></a> <!--Leppu's Twitter-->
 	<a href="javascript:window.open('http://www.praguerace.com/rss.php');"><img id="rss" src="./images/rss.png"></a> <!--Hiveworks's RSS--> <!--TBH I have no idea about how RSS works or how to use it-->
+	<a href="/subscribe.html"><img id="email" src="/images/email.png"></a> <!--email notifications-->
 	<a href="javascript:window.open('https://www.patreon.com/praguerace');"><img id="patreon" src="./images/patreon.png"></a> <!--Leppu's Patreon--> <!--Please go donate!-->
 
 	<div id="vertiBar"></div> <!--The side bar thing-->

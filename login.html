@@ -5,79 +5,15 @@
 	<link rel="stylesheet" type="text/css" href="/resources/style.css">
 	<script src="/resources/jQuery.js">//jQuery</script>
 	<script src="/resources/gui.js"></script>
+	<script src="/resources/login.js"></script>
 	<script>
-		//// POST DATA TO THE SERVER //////////////////////////////////////////////////////////////
-
 		window.onload = function() {
-			var name = document.cookie.split(",")[0];
-			var password = document.cookie.split(",")[1];
-			jQuery.post("/login", {
-				username: name,
-				pass: password
-			}, function(result) {
-				if(result.indexOf("complete,") == 0) {
-					window.location = "/prefs.html";
-				}
-			});
-		}
-
-		function post() {
-			var name = document.getElementById("name").value.toLowerCase();
-			var password = document.getElementById("pw").value;
-			jQuery.post("/login", {
-				username: name,
-				pass: password
-			}, function(result) {
-				switch(result.split(",")[0]) {
-					case "complete":
-						document.cookie = name + "," + password + "; path=/prefs.html";
-						document.cookie = name + "," + password + "; path=/login.html";
-						document.getElementById("warn").style.opacity = "0";
-						window.location = "/prefs.html";
-					break;
-					case "password": //the password deosn't match the username
-						document.getElementById("warn").innerHTML = "Incorrect password.";
-						document.getElementById("warn").style.opacity = "1";
-					break;
-					case "username": //username doesn't exist
-						document.getElementById("warn").innerHTML = "This user doesn't exist!";
-						document.getElementById("warn").style.opacity = "1";
-					break;
-					case "verify": //the user's email isn't verified
-						document.getElementById("warn").innerHTML = "You need to verify your email before logging in.";
-						document.getElementById("warn").style.opacity = "1";
-					break;
-
-					default: //error
-						document.getElementById("warn").innerHTML = "A server error occured:\n" + result;
-						document.getElementById("warn").style.opacity = "1";
-					break;
-				}
-			});
-		}
-
-		function recover() {
-			var mail = prompt("Please enter your email for recovery. You will me sent a message containing instructions.");
-			if(mail == "null" || mail == null) {
-				return;
+			try {
+				check();
 			}
-			else {
-				jQuery.get("/recover", {
-					name: mail
-				}, function(result) {
-					switch(result) {
-						case "complete":
-							alert("Please check your email.");
-						break;
-						case "mail":
-							alert("Your email was invalid.");
-						break;
-
-						default:
-							alert("And error occured!\n" + result);
-						break;
-					}
-				});
+			catch(err) {
+				alert("Scripts in this page have not loaded properly and it will not be functionable if they aren't loaded. This page will refresh itself once you close this message.");
+				window.location.reload();
 			}
 		}
 	</script>
@@ -89,6 +25,7 @@
 	<a href="javascript:window.open('http://leppu.tumblr.com/');"><img id="tumblr" src="./images/tumblr.png"></a> <!--Leppu's Tumblr-->
 	<a href="javascript:window.open('https://twitter.com/petra_nordlund');"><img id="twitter" src="./images/twitter.png"></a> <!--Leppu's Twitter-->
 	<a href="javascript:window.open('http://www.praguerace.com/rss.php');"><img id="rss" src="./images/rss.png"></a> <!--Hiveworks's RSS--> <!--TBH I have no idea about how RSS works or how to use it-->
+	<a href="/subscribe.html"><img id="email" src="/images/email.png"></a> <!--email notifications-->
 	<a href="javascript:window.open('https://www.patreon.com/praguerace');"><img id="patreon" src="./images/patreon.png"></a> <!--Leppu's Patreon--> <!--Please go donate!-->
 
 	<div id="vertiBar"></div> <!--The side bar thing-->
