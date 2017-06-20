@@ -191,7 +191,6 @@ function checkPW() {
 		if (pw1 == pw2) {
 			if(pw1.indexOf(",") != -1
 				|| pw1.indexOf(":") != -1
-				|| pw1.indexOf(" ") != -1
 				|| pw1.indexOf("'") != -1
 				|| pw1.indexOf("*") != -1
 				|| pw1.indexOf("&") != -1
@@ -239,6 +238,79 @@ function changePW() {
 		var name = document.cookie.split(",")[0];
 		var oldPass = document.getElementById("oldPW").value;
 		var newPass = document.getElementById("newPW1").value;
+
+		if(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(name) == false) {
+			document.getElementById("warn").innerHTML = "Invalid email address.";
+			document.getElementById("warn").style.opacity = "1";
+			return;
+		}
+		else {
+			document.getElementById("warn").style.opacity = "0";
+			document.getElementById("warn").innerHTML = "Access granted, hacking the mainframe...";
+		}
+
+		if(oldPass.indexOf(",") != -1
+			|| oldPass.indexOf(":") != -1
+			|| oldPass.indexOf("'") != -1
+			|| oldPass.indexOf("*") != -1
+			|| oldPass.indexOf("&") != -1
+			|| oldPass.indexOf("=") != -1
+			|| oldPass.indexOf("(") != -1
+			|| oldPass.indexOf(")") != -1
+			|| oldPass.indexOf("{") != -1
+			|| oldPass.indexOf("}") != -1
+			|| oldPass.indexOf("[") != -1
+			|| oldPass.indexOf("]") != -1
+			|| oldPass.indexOf("+") != -1
+			|| oldPass.indexOf("\\") != -1
+			|| oldPass.indexOf("\"") != -1) { //check for sh*t
+			document.getElementById("warn").innerHTML = "Invalid password.";
+			document.getElementById("warn").style.opacity = "1";
+			document.getElementById("submit").disabled = true;
+		}
+		else {
+			if (oldPass.length > 6) {
+				document.getElementById("warn").style.opacity = "0";
+				document.getElementById("submit").disabled = false;
+			}
+			else {
+				document.getElementById("warn").innerHTML = "Your old password is too short.";
+				document.getElementById("warn").style.opacity = "1";
+				document.getElementById("submit").disabled = true;
+			}
+		}
+
+		if(newPass.indexOf(",") != -1
+			|| newPass.indexOf(":") != -1
+			|| newPass.indexOf("'") != -1
+			|| newPass.indexOf("*") != -1
+			|| newPass.indexOf("&") != -1
+			|| newPass.indexOf("=") != -1
+			|| newPass.indexOf("(") != -1
+			|| newPass.indexOf(")") != -1
+			|| newPass.indexOf("{") != -1
+			|| newPass.indexOf("}") != -1
+			|| newPass.indexOf("[") != -1
+			|| newPass.indexOf("]") != -1
+			|| newPass.indexOf("+") != -1
+			|| newPass.indexOf("\\") != -1
+			|| newPass.indexOf("\"") != -1) {
+			document.getElementById("warn").innerHTML = "Invalid password.";
+			document.getElementById("warn").style.opacity = "1";
+			document.getElementById("submit").disabled = true;
+		}
+		else {
+			if (newPass.length > 6) {
+				document.getElementById("warn").style.opacity = "0";
+				document.getElementById("submit").disabled = false;
+			}
+			else {
+				document.getElementById("warn").innerHTML = "Your new password is too short.";
+				document.getElementById("warn").style.opacity = "1";
+				document.getElementById("submit").disabled = true;
+			}
+		}
+
 		jQuery.post("/newPass", {
 			username: name,
 			pass: oldPass,

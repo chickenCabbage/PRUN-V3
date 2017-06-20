@@ -19,29 +19,24 @@ function post() {
 
 	if(password.indexOf(",") != -1
 		|| password.indexOf(":") != -1
-		|| password.indexOf(" ") != -1
 		|| password.indexOf("'") != -1
 		|| password.indexOf("*") != -1
 		|| password.indexOf("&") != -1
 		|| password.indexOf("=") != -1
+		|| password.indexOf("(") != -1
+		|| password.indexOf(")") != -1
+		|| password.indexOf("{") != -1
+		|| password.indexOf("}") != -1
+		|| password.indexOf("[") != -1
+		|| password.indexOf("]") != -1
+		|| password.indexOf("+") != -1
 		|| password.indexOf("\\") != -1
 		|| password.indexOf("\"") != -1) { //not gonna inject me, boi
 		document.getElementById("warn").innerHTML = "Invalid password.";
 		document.getElementById("warn").style.opacity = "1";
 		return;
 	}
-	if(name.indexOf(",") != -1
-		|| name.indexOf(":") != -1
-		|| name.indexOf(" ") != -1
-		|| name.indexOf("'") != -1
-		|| name.indexOf("*") != -1
-		|| name.indexOf("&") != -1
-		|| name.indexOf("=") != -1
-		|| name.indexOf("%") != -1
-		|| name.indexOf("\\") != -1
-		|| name.indexOf("\"") != -1
-		|| name.indexOf("@") == -1
-		|| name.indexOf(".") == -1) {
+	if(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(name) == false) {
 		document.getElementById("warn").innerHTML = "Invalid email address.";
 		document.getElementById("warn").style.opacity = "1";
 		return;

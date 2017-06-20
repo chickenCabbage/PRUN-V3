@@ -10,7 +10,6 @@ function checkPW() {
 	if (pw1 == pw2) {
 		if(pw1.indexOf(",") != -1
 			|| pw1.indexOf(":") != -1
-			|| pw1.indexOf(" ") != -1
 			|| pw1.indexOf("'") != -1
 			|| pw1.indexOf("*") != -1
 			|| pw1.indexOf("&") != -1
@@ -64,7 +63,6 @@ function post() {
 
 	if(pw1.indexOf(",") != -1
 		|| pw1.indexOf(":") != -1
-		|| pw1.indexOf(" ") != -1
 		|| pw1.indexOf("'") != -1
 		|| pw1.indexOf("*") != -1
 		|| pw1.indexOf("&") != -1
