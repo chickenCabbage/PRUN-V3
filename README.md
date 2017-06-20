@@ -10,7 +10,7 @@ when the comic updates and a new page comes out.
 ### Why use PRUN instead of an RSS feed reader?
 
 Feeds are often a few minutes late. This is Bad™ if you want _immidiate_
-updates. PRUN's maximal latency is 30 seconds, while readers can get to
+updates. PRUN's maximal latency is 60 seconds, while readers can get to
 10 minutes of delay.  
 PRUN doesn't require an external program downloaded from who-knows-where,
 and will give you a shoutout over e-mail wherever and whenever. It's pretty
@@ -40,7 +40,6 @@ The Node.js scripts require the following modules:
 * colors
 * http
 * fs
-
 
 The program uses ports 8888 (for serving the website) and 567 (for SMTP). 8888
 must be configured in the router as a port to be forwarded to port 80 (HTTP),

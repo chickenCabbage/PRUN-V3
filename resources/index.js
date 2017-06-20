@@ -59,7 +59,7 @@ function check() {
 
 window.onLoad = setInterval(function() {
 	document.getElementById("status").innerHTML = "Checked " + lastCheckTime + " seconds ago."
-	if (lastCheckTime == 30){ //reset the check loop
+	if (lastCheckTime == 60){ //reset the check loop
 		check(); //refresh
 		lastCheckTime = 0;
 	}

@@ -62,4 +62,4 @@ client.fetch(); //initialization
 
 setInterval(function() { //do this every 30 seconds (30,000 milis)
   client.fetch();
-}, 30000);
+}, 60000);
