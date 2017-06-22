@@ -20,6 +20,7 @@ function newUser(request, response) { //when a user is trying to subscribe
 		body += chunk;
 	});
 	request.on("end", function() { //when you're done reading the data
+		body = body.replace(" ", "%20");
 
 		//for future reference
 		//body.split("=")[1].split("&")[0].replace("%40", "@") gives the email
@@ -74,6 +75,7 @@ function authLogin(request, response) { //on every login attempt
 		body += chunk;
 	});
 	request.on("end", function() { //when you're done
+		body = body.replace(" ", "%20");
 		try {
 			var name = body.split("=")[1].split("&")[0].replace("%40", "@").toString(); //a little shorter
 			var password = body.split("=")[2].toString();
@@ -125,6 +127,7 @@ function replacePW(request, response) {
 		body += chunk;
 	});
 	request.on("end", function() { //when you're done
+		body = body.replace(" ", "%20");
 		var name = body.split("=")[1].split("&")[0].replace("%40", "@");
 		var oldp = body.split("=")[2].toString().split("&")[0];
 		var newp = body.split("=")[3].toString();
@@ -182,6 +185,7 @@ function savePrefs(request, response) {
 		body += chunk;
 	});
 	request.on("end", function() { //when you're done reading the data
+		body = body.replace(" ", "%20");
 		var name = body.split("=")[1].split("&")[0].replace("%40", "@"); //their username
 		var pass = body.split("=")[2].toString().split("&")[0]; //password
 		var mail = body.split("=")[3].toString().split("&")[0] == "true"; //do they want to be updated
