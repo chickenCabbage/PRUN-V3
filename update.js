@@ -3,7 +3,6 @@ var client = new insp("http://www.praguerace.com", {timeout: 99999}, {"User-Agen
 var exec = require("child_process").exec;
 var colors = require("colors");
 var fs = require("fs");
-var intervalTime = 1 * 60 * 1000;
 var intervalTime = 2 * 60 * 1000;
 
 var title = fs.readFileSync("./update.txt").toString().split(",")[1]; //stores the page's title
