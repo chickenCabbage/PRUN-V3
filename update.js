@@ -4,12 +4,13 @@ var exec = require("child_process").exec;
 var colors = require("colors");
 var fs = require("fs");
 var intervalTime = 1 * 60 * 1000;
+var intervalTime = 2 * 60 * 1000;
 
 var title = fs.readFileSync("./update.txt").toString().split(",")[1]; //stores the page's title
 
 function errPrint(text) {
 	console.log("\n" + colors.red("ERROR: ") + text);
-	console.log("Error occured on " + now + "\n");
+	console.log("Error occured on " + now() + "\n");
 }
 function wrnPrint(text) {
 	console.log(colors.yellow("WARNING: ") + text);
