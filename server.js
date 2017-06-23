@@ -282,11 +282,11 @@ function hash(text) { //encrypt text
 http.createServer(function(request, response) { //on every request to the server
 	try {
 		if(request.url == "/server.js"
-		|| request.url == "/update.js"
-		|| request.url == "/verify.jar"
-		|| request.url == "/mailer.jar"
-		|| request.url == "/README.md"
-		|| request.url.toString().indexOf("/users/") != -1) { //NOPE
+			|| request.url == "/update.js"
+			|| request.url == "/verify.jar"
+			|| request.url == "/mailer.jar"
+			|| request.url == "/README.md"
+			|| request.url.toString().indexOf("/users/") != -1) { //NOPE
 			throw "403"; //FORBIDDEN AS F**K
 		}
 
